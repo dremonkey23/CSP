@@ -48,11 +48,10 @@
     button.primary { background: linear-gradient(135deg, #1668ff, #7b3cff); border: 0; }
     button:disabled { opacity: .55; cursor: not-allowed; }
     main { padding: 22px 32px 40px; }
-    .grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+    .grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
     .card { background: rgba(13, 19, 32, .82); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.18); }
     .metric-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
     .metric-value { margin-top: 8px; font-size: 24px; font-weight: 800; letter-spacing: -.03em; }
-    .note { color: var(--yellow); line-height: 1.45; }
     .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
     .tab { border-color: rgba(255,255,255,.08); color: var(--muted); }
     .tab.active { color: white; border-color: var(--blue); background: rgba(98,168,255,.14); }
@@ -87,14 +86,7 @@
       <h1>CSP Radar</h1>
       <div class="sub">Private cash-secured put dashboard. Read-only static snapshot; data refreshes on the scheduled GitHub Actions workflow. Ranks opportunity quality; cash required is metadata, not a filter.</div>
     </div>
-    <div>
-      <div class="actions">
-        <select id="reportSelect"></select>
-        <button id="refreshBtn">Reload</button>
-        <button id="scanBtn" class="primary" title="Static site: refresh runs on schedule">Scheduled Refresh</button>
-      </div>
-      <div id="status"></div>
-    </div>
+    <div id="status"></div>
   </header>
 
   <main>
@@ -103,10 +95,11 @@
       <div class="card"><div class="metric-label">Rejected</div><div id="rejected" class="metric-value">—</div></div>
       <div class="card"><div class="metric-label">Symbols</div><div id="symbols" class="metric-value">—</div></div>
       <div class="card"><div class="metric-label">Missing Delta</div><div id="deltaMissing" class="metric-value">—</div></div>
+      <div class="card"><div class="metric-label">Missing OI</div><div id="oiMissing" class="metric-value">—</div></div>
+      <div class="card"><div class="metric-label">Changes</div><div id="changes" class="metric-value" style="font-size:15px;line-height:1.35">—</div></div>
       <div class="card"><div class="metric-label">Updated</div><div id="updated" class="metric-value" style="font-size:15px;line-height:1.35">—</div></div>
     </section>
 
-    <section class="card note" id="qualityNote">Loading…</section>
 
     <div class="tabs">
       <button class="tab active" data-section="best_overall">Best Overall</button>
@@ -149,15 +142,7 @@
 
     async function loadReports() {
       const res = await fetch('data/reports.json');
-      const reports = await res.json();
-      const sel = el('reportSelect');
-      sel.innerHTML = '';
-      reports.forEach(r => {
-        const opt = document.createElement('option');
-        opt.value = r.date;
-        opt.textContent = `${r.date} (${Math.round(r.bytes/1024)} KB)`;
-        sel.appendChild(opt);
-      });
+      return await res.json();
     }
 
     async function loadReport(date=null) {
@@ -177,9 +162,14 @@
       el('rejected').textContent = s.reject_count.toLocaleString();
       el('symbols').textContent = s.symbols_count.toLocaleString();
       el('deltaMissing').textContent = s.missing_delta_pct + '%';
+      el('oiMissing').textContent = s.missing_open_interest_pct + '%';
+      const change = payload.change_summary || {};
+      if (change.available) {
+        el('changes').textContent = `${change.changed_visible_rows} rows changed`;
+      } else {
+        el('changes').textContent = 'Baseline';
+      }
       el('updated').textContent = payload.updated_at;
-      const reasons = s.reject_reasons.map(([k,v]) => `${k}: ${v}`).join(' · ');
-      el('qualityNote').innerHTML = `<strong>Data quality:</strong> ${s.data_quality_note}<br><span class="muted">Top reject reasons: ${reasons || 'none'}</span>`;
     }
 
     function sortRows(rows) {
@@ -257,12 +247,6 @@
       else sortState = { key, dir: key === 'spread_pct' || key === 'dte' ? 'asc' : 'desc' };
       renderTable();
     }));
-    el('refreshBtn').addEventListener('click', async () => loadReport(el('reportSelect').value));
-    el('reportSelect').addEventListener('change', async () => loadReport(el('reportSelect').value));
-    el('scanBtn').addEventListener('click', () => {
-      setStatus('Static GitHub Pages mode: data refresh runs on the scheduled GitHub Actions workflow.', 'warn');
-    });
-
     (async function init() {
       try {
         await loadReports();
