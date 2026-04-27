@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: csp-radar
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m csp_radar.dashboard --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: CSP_DASHBOARD_USER
+        sync: false
+      - key: CSP_DASHBOARD_PASSWORD
+        sync: false
+      - key: ALPACA_API_KEY
+        sync: false
+      - key: ALPACA_SECRET_KEY
+        sync: false
+      - key: ALPACA_DATA_BASE_URL
+        value: https://data.alpaca.markets/v2
+      - key: FINNHUB_API_KEY
+        sync: false

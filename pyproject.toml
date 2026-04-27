@@ -1,0 +1,12 @@
+[project]
+name = "csp-radar"
+version = "0.1.0"
+description = "Private cash-secured put opportunity scanner"
+requires-python = ">=3.11"
+dependencies = [
+  "requests>=2.31",
+  "PyYAML>=6.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

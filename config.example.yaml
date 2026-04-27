@@ -1,0 +1,22 @@
+universe:
+  mode: watchlist
+  tickers: [NVDA, AMD, PLTR, SOFI, HOOD, COIN, TSLA, META, AMZN, GOOGL, MSFT, AAPL, ARM, AVGO, MSTR, RIVN, AFRM]
+
+providers:
+  options: tradier
+  earnings: finnhub
+  fundamentals: later
+
+filters:
+  min_dte: 14
+  max_dte: 45
+  min_delta: -0.35
+  max_delta: -0.15
+  min_open_interest: 100
+  min_volume: 20
+  max_bid_ask_spread_pct: 20
+  min_bid: 0.20
+  avoid_earnings_within_days: 14
+
+ranking:
+  top_n: 10

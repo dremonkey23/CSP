@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSP Radar</title>
+  <style>
+    :root {
+      --bg: #07090f;
+      --panel: #0d1320;
+      --panel2: #111a2b;
+      --text: #e8eefc;
+      --muted: #8fa0bd;
+      --line: #24314c;
+      --green: #39d98a;
+      --red: #ff657a;
+      --yellow: #ffd166;
+      --blue: #62a8ff;
+      --purple: #b392ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #17213a 0, #07090f 34rem), var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      padding: 28px 32px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+    }
+    h1 { margin: 0; font-size: 28px; letter-spacing: -0.04em; }
+    .sub { color: var(--muted); margin-top: 8px; font-size: 14px; max-width: 860px; }
+    .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+    button, select, input {
+      background: var(--panel2);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+    }
+    button { cursor: pointer; font-weight: 700; }
+    button.primary { background: linear-gradient(135deg, #1668ff, #7b3cff); border: 0; }
+    button:disabled { opacity: .55; cursor: not-allowed; }
+    main { padding: 22px 32px 40px; }
+    .grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+    .card { background: rgba(13, 19, 32, .82); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.18); }
+    .metric-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+    .metric-value { margin-top: 8px; font-size: 24px; font-weight: 800; letter-spacing: -.03em; }
+    .note { color: var(--yellow); line-height: 1.45; }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
+    .tab { border-color: rgba(255,255,255,.08); color: var(--muted); }
+    .tab.active { color: white; border-color: var(--blue); background: rgba(98,168,255,.14); }
+    .filters { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+    .filters input { min-width: 150px; }
+    table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 14px; }
+    th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid rgba(255,255,255,.06); white-space: nowrap; }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; background: rgba(255,255,255,.03); position: sticky; top: 0; }
+    td { font-size: 13px; }
+    tr:hover td { background: rgba(255,255,255,.025); }
+    .table-wrap { overflow: auto; max-height: 68vh; border: 1px solid rgba(255,255,255,.07); border-radius: 14px; }
+    .ticker { font-weight: 900; color: white; }
+    .score { font-weight: 900; }
+    .good { color: var(--green); }
+    .bad { color: var(--red); }
+    .warn { color: var(--yellow); }
+    .muted { color: var(--muted); }
+    .pill { display:inline-flex; align-items:center; gap:6px; padding: 4px 8px; border-radius: 999px; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); }
+    #status { color: var(--muted); font-size: 13px; margin-top: 8px; min-height: 18px; text-align: right; }
+    .wide { grid-column: span 2; }
+    @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } header { flex-direction: column; } .actions { justify-content: flex-start; } }
+    @media (max-width: 700px) { main, header { padding-left: 16px; padding-right: 16px; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>CSP Radar</h1>
+      <div class="sub">Private cash-secured put dashboard. Read-only. Ranks opportunity quality; cash required is metadata, not a filter.</div>
+    </div>
+    <div>
+      <div class="actions">
+        <select id="reportSelect"></select>
+        <button id="refreshBtn">Reload</button>
+        <button id="scanBtn" class="primary">Run Fresh Scan</button>
+      </div>
+      <div id="status"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="grid">
+      <div class="card"><div class="metric-label">Accepted</div><div id="accepted" class="metric-value">—</div></div>
+      <div class="card"><div class="metric-label">Rejected</div><div id="rejected" class="metric-value">—</div></div>
+      <div class="card"><div class="metric-label">Symbols</div><div id="symbols" class="metric-value">—</div></div>
+      <div class="card"><div class="metric-label">Missing Delta</div><div id="deltaMissing" class="metric-value">—</div></div>
+      <div class="card"><div class="metric-label">Updated</div><div id="updated" class="metric-value" style="font-size:15px;line-height:1.35">—</div></div>
+    </section>
+
+    <section class="card note" id="qualityNote">Loading…</section>
+
+    <div class="tabs">
+      <button class="tab active" data-section="best_overall">Best Overall</button>
+      <button class="tab" data-section="highest_premium">Highest Premium</button>
+      <button class="tab" data-section="best_assignment">Best Assignment Price</button>
+      <button class="tab" data-section="rejects">Rejects / Landmines</button>
+    </div>
+
+    <div class="filters">
+      <input id="tickerFilter" placeholder="Filter ticker…" />
+      <input id="minScore" type="number" min="0" max="100" value="0" placeholder="Min score" />
+      <span class="muted" id="rowCount"></span>
+    </div>
+
+    <section class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Ticker</th><th>Contract</th><th>Score</th><th>Annualized</th><th>Premium</th><th>Cash Req.</th><th>Breakeven</th><th>Assign Disc.</th><th>Spread</th><th>Vol</th><th>Delta</th><th>OI</th><th>Risk / Reject</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    let payload = null;
+    let activeSection = 'best_overall';
+
+    const fmtMoney = v => '$' + Number(v || 0).toLocaleString(undefined, {maximumFractionDigits: 2});
+    const fmtPct = v => (Number(v || 0) * 100).toFixed(1) + '%';
+    const fmtSpread = v => Number(v || 0).toFixed(1) + '%';
+    const fmtNum = v => v === null || v === undefined ? '—' : Number(v).toLocaleString();
+    const el = id => document.getElementById(id);
+
+    function setStatus(text, cls='') { el('status').textContent = text; el('status').className = cls; }
+
+    async function loadReports() {
+      const res = await fetch('/api/reports');
+      const reports = await res.json();
+      const sel = el('reportSelect');
+      sel.innerHTML = '';
+      reports.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r.date;
+        opt.textContent = `${r.date} (${Math.round(r.bytes/1024)} KB)`;
+        sel.appendChild(opt);
+      });
+    }
+
+    async function loadReport(date=null) {
+      setStatus('Loading report…');
+      const qs = date ? '?date=' + encodeURIComponent(date) : '';
+      const res = await fetch('/api/report' + qs);
+      if (!res.ok) throw new Error((await res.json()).error || 'Failed loading report');
+      payload = await res.json();
+      renderStats();
+      renderTable();
+      setStatus('Loaded ' + payload.date);
+    }
+
+    function renderStats() {
+      const s = payload.stats;
+      el('accepted').textContent = s.accepted_count.toLocaleString();
+      el('rejected').textContent = s.reject_count.toLocaleString();
+      el('symbols').textContent = s.symbols_count.toLocaleString();
+      el('deltaMissing').textContent = s.missing_delta_pct + '%';
+      el('updated').textContent = payload.updated_at;
+      const reasons = s.reject_reasons.map(([k,v]) => `${k}: ${v}`).join(' · ');
+      el('qualityNote').innerHTML = `<strong>Data quality:</strong> ${s.data_quality_note}<br><span class="muted">Top reject reasons: ${reasons || 'none'}</span>`;
+    }
+
+    function renderTable() {
+      if (!payload) return;
+      const ticker = el('tickerFilter').value.trim().toUpperCase();
+      const minScore = Number(el('minScore').value || 0);
+      let rows = payload.sections[activeSection] || [];
+      rows = rows.filter(r => (!ticker || String(r.ticker).includes(ticker)) && Number(r.total_score || 0) >= minScore);
+      el('rowCount').textContent = `${rows.length} rows`;
+      const tbody = el('tbody');
+      tbody.innerHTML = '';
+      for (const r of rows) {
+        const tr = document.createElement('tr');
+        const scoreClass = r.reject_reason ? 'bad' : (r.total_score >= 75 ? 'good' : (r.total_score >= 60 ? 'warn' : ''));
+        tr.innerHTML = `
+          <td><span class="ticker">${r.ticker}</span><br><span class="muted">Stock ${fmtMoney(r.stock_price)}</span></td>
+          <td><span class="pill">$${r.strike}P</span><br><span class="muted">${r.expiry} · ${r.dte} DTE</span></td>
+          <td class="score ${scoreClass}">${Number(r.total_score).toFixed(0)}</td>
+          <td>${fmtPct(r.annualized_return)}</td>
+          <td>${fmtMoney(r.premium_received)}<br><span class="muted">mid ${fmtMoney(r.mid)}</span></td>
+          <td>${fmtMoney(r.cash_required)}</td>
+          <td>${fmtMoney(r.breakeven)}</td>
+          <td>${fmtPct(r.assignment_discount)}</td>
+          <td class="${r.spread_pct > 20 ? 'warn' : ''}">${fmtSpread(r.spread_pct)}</td>
+          <td>${fmtNum(r.volume)}</td>
+          <td>${r.delta ?? '—'}</td>
+          <td>${fmtNum(r.open_interest)}</td>
+          <td class="${r.reject_reason ? 'bad' : 'muted'}">${r.reject_reason || 'clear'}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeSection = btn.dataset.section;
+      renderTable();
+    }));
+
+    el('tickerFilter').addEventListener('input', renderTable);
+    el('minScore').addEventListener('input', renderTable);
+    el('refreshBtn').addEventListener('click', async () => loadReport(el('reportSelect').value));
+    el('reportSelect').addEventListener('change', async () => loadReport(el('reportSelect').value));
+    el('scanBtn').addEventListener('click', async () => {
+      const btn = el('scanBtn');
+      btn.disabled = true;
+      setStatus('Running fresh Alpaca scan… this can take a few minutes.');
+      try {
+        const res = await fetch('/api/scan', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({config: 'config.alpaca.yaml'})});
+        const out = await res.json();
+        if (!out.ok) throw new Error(out.stderr_tail || out.error || 'scan failed');
+        await loadReports();
+        await loadReport();
+        setStatus(`Scan complete in ${out.seconds}s`);
+      } catch (e) {
+        setStatus('Scan failed: ' + e.message, 'bad');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    (async function init() {
+      try {
+        await loadReports();
+        await loadReport();
+      } catch (e) {
+        setStatus('Error: ' + e.message, 'bad');
+      }
+    })();
+  </script>
+</body>
+</html>

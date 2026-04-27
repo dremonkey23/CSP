@@ -1,0 +1,25 @@
+universe:
+  mode: watchlist
+  tickers: [NVDA, AMD, PLTR, SOFI, HOOD, COIN, TSLA, META, AMZN, GOOGL, MSFT, AAPL, ARM, AVGO, MSTR, RIVN, AFRM]
+
+providers:
+  options: alpaca
+  earnings: finnhub
+  fundamentals: later
+
+filters:
+  min_dte: 14
+  max_dte: 45
+  min_delta: -0.35
+  max_delta: -0.15
+  # Alpaca Basic/free options snapshots may not include open interest or Greeks.
+  # Keep these relaxed until Tradier/Schwab is available.
+  min_open_interest: 0
+  min_volume: 0
+  max_bid_ask_spread_pct: 35
+  min_bid: 0.05
+  allow_itm: false
+  avoid_earnings_within_days: 14
+
+ranking:
+  top_n: 10
