@@ -85,13 +85,13 @@
   <header>
     <div>
       <h1>CSP Radar</h1>
-      <div class="sub">Static GitHub Pages view of ranked cash-secured put setups. Fresh scans require the private Python backend; this page shows the latest published snapshot.</div>
+      <div class="sub">Private cash-secured put dashboard. Read-only static snapshot; data refreshes on the scheduled GitHub Actions workflow. Ranks opportunity quality; cash required is metadata, not a filter.</div>
     </div>
     <div>
       <div class="actions">
         <select id="reportSelect"></select>
         <button id="refreshBtn">Reload</button>
-        <button id="scanBtn" class="primary" disabled title="Static GitHub Pages view — run scans from backend/local app">Run Fresh Scan</button>
+        <button id="scanBtn" class="primary" title="Static site: refresh runs on schedule">Scheduled Refresh</button>
       </div>
       <div id="status"></div>
     </div>
@@ -148,7 +148,7 @@
     function setStatus(text, cls='') { el('status').textContent = text; el('status').className = cls; }
 
     async function loadReports() {
-      const res = await fetch('data/reports.json', {cache: 'no-store'});
+      const res = await fetch('data/reports.json');
       const reports = await res.json();
       const sel = el('reportSelect');
       sel.innerHTML = '';
@@ -162,8 +162,8 @@
 
     async function loadReport(date=null) {
       setStatus('Loading report…');
-      const reportDate = date || (el('reportSelect').value || 'latest');
-      const res = await fetch('data/report-' + encodeURIComponent(reportDate) + '.json', {cache: 'no-store'});
+      const qs = date ? '?date=' + encodeURIComponent(date) : '';
+      const res = await fetch(date ? 'data/report-' + encodeURIComponent(date) + '.json' : 'data/report-latest.json');
       if (!res.ok) throw new Error((await res.json()).error || 'Failed loading report');
       payload = await res.json();
       renderStats();
@@ -259,24 +259,8 @@
     }));
     el('refreshBtn').addEventListener('click', async () => loadReport(el('reportSelect').value));
     el('reportSelect').addEventListener('change', async () => loadReport(el('reportSelect').value));
-    el('scanBtn').addEventListener('click', async () => {
-      const btn = el('scanBtn');
-      btn.disabled = true;
-      setStatus('Static GitHub Pages view: fresh scans require the Python backend/Render app.', 'warn');
-      btn.disabled = true;
-      return;
-      try {
-        const res = await fetch('/api/scan', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({config: 'config.alpaca.yaml'})});
-        const out = await res.json();
-        if (!out.ok) throw new Error(out.stderr_tail || out.error || 'scan failed');
-        await loadReports();
-        await loadReport();
-        setStatus(`Scan complete in ${out.seconds}s`);
-      } catch (e) {
-        setStatus('Scan failed: ' + e.message, 'bad');
-      } finally {
-        btn.disabled = false;
-      }
+    el('scanBtn').addEventListener('click', () => {
+      setStatus('Static GitHub Pages mode: data refresh runs on the scheduled GitHub Actions workflow.', 'warn');
     });
 
     (async function init() {

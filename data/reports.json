@@ -1,1 +1,8 @@
-[{"date":"2026-04-27","bytes":253725},{"date":"latest","bytes":253725}]
+[
+  {
+    "date": "2026-04-27",
+    "file": "/home/runner/work/CSP/CSP/reports/2026-04-27.json",
+    "bytes": 4675997,
+    "updated_at": "2026-04-27 17:28:10 EDT"
+  }
+]
