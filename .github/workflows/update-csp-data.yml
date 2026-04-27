@@ -55,7 +55,7 @@ jobs:
           git fetch origin gh-pages:gh-pages
           rm -rf /tmp/csp-gh-pages
           git worktree add /tmp/csp-gh-pages gh-pages
-          rsync -a --delete /tmp/csp-pages-output/ /tmp/csp-gh-pages/
+          rsync -a --delete --exclude='.git' /tmp/csp-pages-output/ /tmp/csp-gh-pages/
           cd /tmp/csp-gh-pages
           git add -A
           if git diff --cached --quiet; then
