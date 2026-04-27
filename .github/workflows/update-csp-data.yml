@@ -1,0 +1,66 @@
+name: Update CSP Radar data
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 10:15 AM New York time during daylight saving time.
+    # Adjust to 15:15 UTC in winter if you want to keep exactly 10:15 AM ET year-round.
+    - cron: '15 14 * * 1-5'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: csp-radar-refresh
+  cancel-in-progress: false
+
+env:
+  TZ: America/New_York
+  PYTHONUNBUFFERED: '1'
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Validate source
+        run: python -m py_compile csp_radar/*.py csp_radar/data_sources/*.py scripts/*.py
+
+      - name: Run Tradier CSP scan
+        env:
+          TRADIER_TOKEN: ${{ secrets.TRADIER_TOKEN }}
+        run: python -m csp_radar.scanner --config config.example.yaml
+
+      - name: Build static dashboard payload
+        run: python scripts/build_static_site.py --out /tmp/csp-pages-output
+
+      - name: Publish to gh-pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin gh-pages:gh-pages
+          rm -rf /tmp/csp-gh-pages
+          git worktree add /tmp/csp-gh-pages gh-pages
+          rsync -a --delete /tmp/csp-pages-output/ /tmp/csp-gh-pages/
+          cd /tmp/csp-gh-pages
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No dashboard data changes to publish."
+          else
+            git commit -m "Update CSP Radar snapshot"
+            git push origin gh-pages
+          fi
