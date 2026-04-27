@@ -56,12 +56,12 @@
     .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
     .tab { border-color: rgba(255,255,255,.08); color: var(--muted); }
     .tab.active { color: white; border-color: var(--blue); background: rgba(98,168,255,.14); }
-    .filters { display: grid; grid-template-columns: repeat(8, minmax(120px, 1fr)); gap: 10px; align-items: end; margin-bottom: 14px; }
-    .filter-control { display: flex; flex-direction: column; gap: 5px; }
-    .filter-control label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .07em; }
-    .filter-control input, .filter-control select { width: 100%; min-width: 0; }
-    .filter-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; grid-column: span 2; }
-    .mini { padding: 9px 10px; font-size: 13px; }
+    .filters { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+    .filters input { min-width: 150px; }
+    th.sortable { cursor: pointer; user-select: none; }
+    th.sortable:hover { color: var(--text); background: rgba(98,168,255,.10); }
+    th.sorted { color: var(--blue); }
+    th.sorted::after { content: ' ' attr(data-arrow); color: var(--blue); }
     table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 14px; }
     th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid rgba(255,255,255,.06); white-space: nowrap; }
     th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; background: rgba(255,255,255,.03); position: sticky; top: 0; }
@@ -77,9 +77,8 @@
     .pill { display:inline-flex; align-items:center; gap:6px; padding: 4px 8px; border-radius: 999px; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); }
     #status { color: var(--muted); font-size: 13px; margin-top: 8px; min-height: 18px; text-align: right; }
     .wide { grid-column: span 2; }
-    @media (max-width: 1300px) { .filters { grid-template-columns: repeat(4, minmax(120px, 1fr)); } }
     @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } header { flex-direction: column; } .actions { justify-content: flex-start; } }
-    @media (max-width: 700px) { main, header { padding-left: 16px; padding-right: 16px; } .grid, .filters { grid-template-columns: 1fr; } .filter-actions { grid-column: auto; } }
+    @media (max-width: 700px) { main, header { padding-left: 16px; padding-right: 16px; } .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -117,37 +116,17 @@
     </div>
 
     <div class="filters">
-      <div class="filter-control"><label for="tickerFilter">Ticker</label><input id="tickerFilter" placeholder="ARM, SOFI…" /></div>
-      <div class="filter-control"><label for="minScore">Min score</label><input id="minScore" type="number" min="0" max="100" value="0" /></div>
-      <div class="filter-control"><label for="minAnnualized">Min annualized %</label><input id="minAnnualized" type="number" step="1" placeholder="Any" /></div>
-      <div class="filter-control"><label for="maxSpread">Max spread %</label><input id="maxSpread" type="number" step="0.1" placeholder="Any" /></div>
-      <div class="filter-control"><label for="minOi">Min OI</label><input id="minOi" type="number" step="1" placeholder="Any" /></div>
-      <div class="filter-control"><label for="minVolume">Min volume</label><input id="minVolume" type="number" step="1" placeholder="Any" /></div>
-      <div class="filter-control"><label for="maxCash">Max cash req.</label><input id="maxCash" type="number" step="100" placeholder="Any" /></div>
-      <div class="filter-control"><label for="maxDte">Max DTE</label><input id="maxDte" type="number" step="1" placeholder="Any" /></div>
-      <div class="filter-control"><label for="sortBy">Sort by</label><select id="sortBy">
-        <option value="section">Section default</option>
-        <option value="total_score">Score</option>
-        <option value="annualized_return">Annualized return</option>
-        <option value="premium_received">Premium</option>
-        <option value="assignment_discount">Assignment discount</option>
-        <option value="spread_pct">Spread</option>
-        <option value="volume">Volume</option>
-        <option value="open_interest">Open interest</option>
-        <option value="delta">Delta</option>
-        <option value="dte">DTE</option>
-        <option value="cash_required">Cash required</option>
-        <option value="ticker">Ticker</option>
-      </select></div>
-      <div class="filter-control"><label for="sortDir">Direction</label><select id="sortDir"><option value="desc">High → Low</option><option value="asc">Low → High</option></select></div>
-      <div class="filter-actions"><button id="resetFilters" class="mini">Reset filters</button><span class="muted" id="rowCount"></span></div>
+      <input id="tickerFilter" placeholder="Filter ticker…" />
+      <input id="minScore" type="number" min="0" max="100" value="0" placeholder="Min score" />
+      <span class="muted">Click any table column header to sort.</span>
+      <span class="muted" id="rowCount"></span>
     </div>
 
     <section class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>Ticker</th><th>Contract</th><th>Score</th><th>Annualized</th><th>Premium</th><th>Cash Req.</th><th>Breakeven</th><th>Assign Disc.</th><th>Spread</th><th>Vol</th><th>Delta</th><th>OI</th><th>Risk / Reject</th>
+            <th class="sortable" data-sort="ticker">Ticker</th><th class="sortable" data-sort="strike">Contract</th><th class="sortable" data-sort="total_score">Score</th><th class="sortable" data-sort="annualized_return">Annualized</th><th class="sortable" data-sort="premium_received">Premium</th><th class="sortable" data-sort="cash_required">Cash Req.</th><th class="sortable" data-sort="breakeven">Breakeven</th><th class="sortable" data-sort="assignment_discount">Assign Disc.</th><th class="sortable" data-sort="spread_pct">Spread</th><th class="sortable" data-sort="volume">Vol</th><th class="sortable" data-sort="delta">Delta</th><th class="sortable" data-sort="open_interest">OI</th><th class="sortable" data-sort="reject_reason">Risk / Reject</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
@@ -164,7 +143,7 @@
     const fmtSpread = v => Number(v || 0).toFixed(1) + '%';
     const fmtNum = v => v === null || v === undefined ? '—' : Number(v).toLocaleString();
     const el = id => document.getElementById(id);
-    const numeric = v => (v === null || v === undefined || v === '') ? null : Number(v);
+    let sortState = { key: 'section', dir: 'desc' };
 
     function setStatus(text, cls='') { el('status').textContent = text; el('status').className = cls; }
 
@@ -203,41 +182,16 @@
       el('qualityNote').innerHTML = `<strong>Data quality:</strong> ${s.data_quality_note}<br><span class="muted">Top reject reasons: ${reasons || 'none'}</span>`;
     }
 
-    function currentFilters() {
-      return {
-        ticker: el('tickerFilter').value.trim().toUpperCase(),
-        minScore: numeric(el('minScore').value) ?? 0,
-        minAnnualized: numeric(el('minAnnualized').value),
-        maxSpread: numeric(el('maxSpread').value),
-        minOi: numeric(el('minOi').value),
-        minVolume: numeric(el('minVolume').value),
-        maxCash: numeric(el('maxCash').value),
-        maxDte: numeric(el('maxDte').value),
-        sortBy: el('sortBy').value,
-        sortDir: el('sortDir').value,
-      };
-    }
-
-    function passesFilters(r, f) {
-      const annualPct = Number(r.annualized_return || 0) * 100;
-      return (!f.ticker || String(r.ticker).toUpperCase().includes(f.ticker)) &&
-        Number(r.total_score || 0) >= f.minScore &&
-        (f.minAnnualized === null || annualPct >= f.minAnnualized) &&
-        (f.maxSpread === null || Number(r.spread_pct || 0) <= f.maxSpread) &&
-        (f.minOi === null || Number(r.open_interest || 0) >= f.minOi) &&
-        (f.minVolume === null || Number(r.volume || 0) >= f.minVolume) &&
-        (f.maxCash === null || Number(r.cash_required || 0) <= f.maxCash) &&
-        (f.maxDte === null || Number(r.dte || 0) <= f.maxDte);
-    }
-
-    function sortRows(rows, f) {
-      if (f.sortBy === 'section') return rows;
-      const key = f.sortBy;
-      const dir = f.sortDir === 'asc' ? 1 : -1;
+    function sortRows(rows) {
+      if (sortState.key === 'section') return rows;
+      const key = sortState.key;
+      const dir = sortState.dir === 'asc' ? 1 : -1;
       return [...rows].sort((a, b) => {
         const av = a[key];
         const bv = b[key];
-        if (key === 'ticker') return String(av || '').localeCompare(String(bv || '')) * dir;
+        if (key === 'ticker' || key === 'reject_reason') {
+          return String(av || '').localeCompare(String(bv || '')) * dir;
+        }
         const an = Number(av ?? (dir === 1 ? Infinity : -Infinity));
         const bn = Number(bv ?? (dir === 1 ? Infinity : -Infinity));
         if (an === bn) return String(a.ticker || '').localeCompare(String(b.ticker || ''));
@@ -245,12 +199,22 @@
       });
     }
 
+    function updateSortHeaders() {
+      document.querySelectorAll('th.sortable').forEach(th => {
+        const active = th.dataset.sort === sortState.key;
+        th.classList.toggle('sorted', active);
+        th.dataset.arrow = active ? (sortState.dir === 'asc' ? '↑' : '↓') : '';
+      });
+    }
+
     function renderTable() {
       if (!payload) return;
-      const filters = currentFilters();
+      const ticker = el('tickerFilter').value.trim().toUpperCase();
+      const minScore = Number(el('minScore').value || 0);
       const baseRows = payload.sections[activeSection] || [];
-      let rows = baseRows.filter(r => passesFilters(r, filters));
-      rows = sortRows(rows, filters);
+      let rows = baseRows.filter(r => (!ticker || String(r.ticker).toUpperCase().includes(ticker)) && Number(r.total_score || 0) >= minScore);
+      rows = sortRows(rows);
+      updateSortHeaders();
       el('rowCount').textContent = `${rows.length} of ${baseRows.length} rows`;
       const tbody = el('tbody');
       tbody.innerHTML = '';
@@ -276,20 +240,6 @@
       }
     }
 
-    function resetFilters() {
-      el('tickerFilter').value = '';
-      el('minScore').value = 0;
-      el('minAnnualized').value = '';
-      el('maxSpread').value = '';
-      el('minOi').value = '';
-      el('minVolume').value = '';
-      el('maxCash').value = '';
-      el('maxDte').value = '';
-      el('sortBy').value = 'section';
-      el('sortDir').value = 'desc';
-      renderTable();
-    }
-
     document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
@@ -297,11 +247,16 @@
       renderTable();
     }));
 
-    ['tickerFilter','minScore','minAnnualized','maxSpread','minOi','minVolume','maxCash','maxDte','sortBy','sortDir'].forEach(id => {
+    ['tickerFilter','minScore'].forEach(id => {
       el(id).addEventListener('input', renderTable);
       el(id).addEventListener('change', renderTable);
     });
-    el('resetFilters').addEventListener('click', resetFilters);
+    document.querySelectorAll('th.sortable').forEach(th => th.addEventListener('click', () => {
+      const key = th.dataset.sort;
+      if (sortState.key === key) sortState.dir = sortState.dir === 'desc' ? 'asc' : 'desc';
+      else sortState = { key, dir: key === 'spread_pct' || key === 'dte' ? 'asc' : 'desc' };
+      renderTable();
+    }));
     el('refreshBtn').addEventListener('click', async () => loadReport(el('reportSelect').value));
     el('reportSelect').addEventListener('change', async () => loadReport(el('reportSelect').value));
     el('scanBtn').addEventListener('click', async () => {
