@@ -103,7 +103,15 @@ def build_payload(date_str: str | None = None) -> dict:
 
     missing_delta = sum(1 for x in items if x.get('delta') is None)
     missing_oi = sum(1 for x in items if x.get('open_interest') is None)
+    missing_delta_pct = round((missing_delta / len(items) * 100), 1) if items else 0
+    missing_oi_pct = round((missing_oi / len(items) * 100), 1) if items else 0
     symbols = sorted({x.get('ticker') for x in items if x.get('ticker')})
+    if missing_oi_pct == 0 and missing_delta_pct <= 5:
+        data_quality_note = 'Tradier mode: Greeks/open interest are present for nearly all contracts. Rankings are higher-confidence than Alpaca bridge mode.'
+    elif missing_delta or missing_oi:
+        data_quality_note = 'Some Greeks/open-interest are missing. Use as lower-confidence until provider coverage improves.'
+    else:
+        data_quality_note = 'Greeks/open-interest present in report.'
 
     return {
         'date': path.stem,
@@ -116,10 +124,10 @@ def build_payload(date_str: str | None = None) -> dict:
             'reject_count': len(rejects),
             'symbols_count': len(symbols),
             'symbols': symbols,
-            'missing_delta_pct': round((missing_delta / len(items) * 100), 1) if items else 0,
-            'missing_open_interest_pct': round((missing_oi / len(items) * 100), 1) if items else 0,
+            'missing_delta_pct': missing_delta_pct,
+            'missing_open_interest_pct': missing_oi_pct,
             'reject_reasons': sorted(reject_reasons.items(), key=lambda kv: kv[1], reverse=True)[:10],
-            'data_quality_note': 'Alpaca bridge mode: Greeks/open interest may be absent. Upgrade to Tradier/Schwab for higher-confidence rankings.' if missing_delta or missing_oi else 'Greeks/open-interest present in report.',
+            'data_quality_note': data_quality_note,
         },
         'sections': {
             'best_overall': accepted_by_score[:100],
