@@ -38,13 +38,17 @@ jobs:
       - name: Validate source
         run: python -m py_compile csp_radar/*.py csp_radar/data_sources/*.py scripts/*.py
 
+      - name: Fetch previous published snapshot
+        run: |
+          curl -fsSL "https://dremonkey23.github.io/CSP/data/report-latest.json?cache=$(date +%s)" -o /tmp/csp-previous-report.json || true
+
       - name: Run Tradier CSP scan
         env:
           TRADIER_TOKEN: ${{ secrets.TRADIER_TOKEN }}
         run: python -m csp_radar.scanner --config config.example.yaml
 
       - name: Build static dashboard payload
-        run: python scripts/build_static_site.py --out /tmp/csp-pages-output
+        run: python scripts/build_static_site.py --out /tmp/csp-pages-output --previous /tmp/csp-previous-report.json
 
       - name: Publish to gh-pages
         shell: bash
