@@ -2,10 +2,6 @@ name: Update CSP Radar data
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/update-csp-data.yml'
   schedule:
     # GitHub cron uses UTC. During EDT: 10:15 AM ET = 14:15 UTC, 3:15 PM ET = 19:15 UTC.
     - cron: '15 14 * * 1-5'
