@@ -4,6 +4,8 @@ Private cash-secured put scanner. It ranks optimal CSP candidates by premium edg
 
 Cash required is shown, but never used to filter or rank.
 
+Default delta band is `-0.35` to `-0.05`, which includes puts under 0.15 absolute delta while still skipping near-zero lotto contracts.
+
 ## Preferred data stack
 
 - Tradier: options chains, quotes, Greeks.

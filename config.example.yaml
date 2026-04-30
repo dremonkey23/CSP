@@ -11,7 +11,9 @@ filters:
   min_dte: 14
   max_dte: 45
   min_delta: -0.35
-  max_delta: -0.15
+  # Include safer, farther-OTM puts below 0.15 absolute delta.
+  # Put deltas are negative, so -0.05 to -0.15 maps to 0.05–0.15 abs delta.
+  max_delta: -0.05
   min_open_interest: 100
   min_volume: 20
   max_bid_ask_spread_pct: 20
