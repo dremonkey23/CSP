@@ -1,11 +1,9 @@
 name: Update CSP Radar data
 
 on:
+  # Hermes is the primary scheduler. Keep this workflow manual/dispatch-only
+  # so delayed GitHub cron runs do not create duplicate market refreshes.
   workflow_dispatch:
-  schedule:
-    # GitHub cron uses UTC. During EDT: 10:15 AM ET = 14:15 UTC, 3:15 PM ET = 19:15 UTC.
-    - cron: '15 14 * * 1-5'
-    - cron: '15 19 * * 1-5'
 
 permissions:
   contents: write
