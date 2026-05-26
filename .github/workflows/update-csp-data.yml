@@ -43,6 +43,7 @@ jobs:
       - name: Run Tradier CSP scan
         env:
           TRADIER_TOKEN: ${{ secrets.TRADIER_TOKEN }}
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
         run: python -m csp_radar.scanner --config config.example.yaml
 
       - name: Build static dashboard payload
