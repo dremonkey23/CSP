@@ -6,6 +6,7 @@ from pathlib import Path
 import yaml
 from .data_sources.tradier import TradierClient
 from .data_sources.alpaca import AlpacaClient
+from .data_sources.earnings import NasdaqEarningsClient
 from .data_sources.finnhub import FinnhubClient
 from .indicators import calculate_rsi
 from .scoring import score_candidate
@@ -24,11 +25,12 @@ def main():
         market_data = TradierClient()
     else:
         raise RuntimeError(f'Unsupported options provider: {provider}')
-    earnings=None
+    earnings_clients=[]
     try:
-        earnings=FinnhubClient()
+        earnings_clients.append(FinnhubClient())
     except RuntimeError:
         pass
+    earnings_clients.append(NasdaqEarningsClient())
     all_scored=[]
     for ticker in cfg['universe']['tickers']:
         price=market_data.get_quote(ticker)
@@ -38,7 +40,11 @@ def main():
                 rsi_14=calculate_rsi(market_data.daily_closes(ticker), 14)
             except Exception:
                 rsi_14=None
-        next_earn = earnings.next_earnings_date(ticker, today) if earnings else None
+        next_earn = None
+        for earnings in earnings_clients:
+            next_earn = earnings.next_earnings_date(ticker, today)
+            if next_earn:
+                break
         for exp in market_data.expirations(ticker):
             exp_date=date.fromisoformat(exp)
             dte=(exp_date-today).days
