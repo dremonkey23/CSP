@@ -119,7 +119,7 @@
       <table>
         <thead>
           <tr>
-            <th class="sortable" data-sort="ticker">Ticker</th><th class="sortable" data-sort="strike">Contract</th><th class="sortable" data-sort="total_score">Score</th><th class="sortable" data-sort="annualized_return">Annualized</th><th class="sortable" data-sort="premium_received">Premium</th><th class="sortable" data-sort="cash_required">Cash Req.</th><th class="sortable" data-sort="breakeven">Breakeven</th><th class="sortable" data-sort="assignment_discount">Assign Disc.</th><th class="sortable" data-sort="spread_pct">Spread</th><th class="sortable" data-sort="volume">Vol</th><th class="sortable" data-sort="delta">Delta</th><th class="sortable" data-sort="open_interest">OI</th><th class="sortable" data-sort="reject_reason">Risk / Reject</th>
+            <th class="sortable" data-sort="ticker">Ticker</th><th class="sortable" data-sort="strike">Contract</th><th class="sortable" data-sort="total_score">Score</th><th class="sortable" data-sort="annualized_return">Annualized</th><th class="sortable" data-sort="premium_received">Premium</th><th class="sortable" data-sort="cash_required">Cash Req.</th><th class="sortable" data-sort="breakeven">Breakeven</th><th class="sortable" data-sort="assignment_discount">Assign Disc.</th><th class="sortable" data-sort="rsi_14">RSI14</th><th class="sortable" data-sort="earnings_date">Earnings</th><th class="sortable" data-sort="spread_pct">Spread</th><th class="sortable" data-sort="volume">Vol</th><th class="sortable" data-sort="delta">Delta</th><th class="sortable" data-sort="open_interest">OI</th><th class="sortable" data-sort="reject_reason">Risk / Reject</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
@@ -220,6 +220,8 @@
           <td>${fmtMoney(r.cash_required)}</td>
           <td>${fmtMoney(r.breakeven)}</td>
           <td>${fmtPct(r.assignment_discount)}</td>
+          <td class="${Number(r.rsi_14 ?? 100) < 40 ? 'good' : (Number(r.rsi_14 ?? 0) >= 60 ? 'warn' : '')}">${r.rsi_14 === null || r.rsi_14 === undefined ? '—' : Number(r.rsi_14).toFixed(1)}</td>
+          <td>${r.earnings_date || '—'}</td>
           <td class="${r.spread_pct > 20 ? 'warn' : ''}">${fmtSpread(r.spread_pct)}</td>
           <td>${fmtNum(r.volume)}</td>
           <td>${r.delta ?? '—'}</td>

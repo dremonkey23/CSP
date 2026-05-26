@@ -61,6 +61,7 @@ def summarize_item(row: dict) -> dict:
         'iv': c.get('iv'),
         'open_interest': c.get('open_interest'),
         'volume': c.get('volume'),
+        'rsi_14': c.get('rsi_14'),
         'earnings_date': c.get('earnings_date'),
         'cash_required': money(row.get('cash_required')),
         'premium_received': money(row.get('premium_received')),
@@ -74,6 +75,7 @@ def summarize_item(row: dict) -> dict:
         'assignment_score': money(row.get('assignment_score')),
         'liquidity_score': money(row.get('liquidity_score')),
         'event_score': money(row.get('event_score')),
+        'technical_score': money(row.get('technical_score')),
         'total_score': money(row.get('total_score')),
         'reject_reason': row.get('reject_reason'),
     }

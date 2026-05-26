@@ -10,6 +10,30 @@ def days_until(d: date | None, today: date) -> int | None:
         return None
     return (d - today).days
 
+def rsi_entry_score(rsi: float | None) -> float:
+    """Daily RSI timing score for CSP entries.
+
+    RSI below 40 is useful because the stock is oversold and put premium is
+    usually richer, but extreme washouts can be falling knives. Reward the
+    30-40 zone most, keep 20-30 attractive, and penalize overbought names.
+    Missing RSI is neutral so provider gaps do not dominate the full score.
+    """
+    if rsi is None:
+        return 50.0
+    if rsi < 20:
+        return 45.0
+    if rsi < 30:
+        return 85.0
+    if rsi < 40:
+        return 100.0
+    if rsi < 50:
+        return 65.0
+    if rsi < 60:
+        return 45.0
+    if rsi < 70:
+        return 25.0
+    return 5.0
+
 def score_candidate(c: OptionCandidate, cfg: dict, today: date) -> ScoredCandidate:
     filters = cfg.get('filters', {})
     mid = c.mid or ((c.bid + c.ask) / 2)
@@ -55,8 +79,10 @@ def score_candidate(c: OptionCandidate, cfg: dict, today: date) -> ScoredCandida
         if 0 <= e_days <= 14: event_score = 0.0
         elif 15 <= e_days <= 21: event_score = 65.0
 
-    total = 0.30 * premium_score + 0.30 * assignment_score + 0.20 * liquidity_score + 0.20 * event_score
+    technical_score = rsi_entry_score(c.rsi_14)
+
+    total = 0.25 * premium_score + 0.25 * assignment_score + 0.20 * liquidity_score + 0.20 * event_score + 0.10 * technical_score
     if reject:
         total = min(total, 49.0)
 
-    return ScoredCandidate(c, cash_required, premium_received, breakeven, return_if_expires, annualized_return, distance_otm, assignment_discount, spread_pct, premium_score, assignment_score, liquidity_score, event_score, total, reject)
+    return ScoredCandidate(c, cash_required, premium_received, breakeven, return_if_expires, annualized_return, distance_otm, assignment_discount, spread_pct, premium_score, assignment_score, liquidity_score, event_score, technical_score, total, reject)

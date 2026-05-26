@@ -15,6 +15,7 @@ class OptionCandidate:
     iv: float | None
     open_interest: int | None
     volume: int | None
+    rsi_14: float | None = None
     earnings_date: date | None = None
 
 @dataclass
@@ -32,5 +33,6 @@ class ScoredCandidate:
     assignment_score: float
     liquidity_score: float
     event_score: float
+    technical_score: float
     total_score: float
     reject_reason: str | None = None

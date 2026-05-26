@@ -14,7 +14,7 @@ def render_markdown(scored: list[ScoredCandidate], limit: int = 10) -> str:
         lines += [
             f'{i}. **{c.ticker} ${c.strike:g}P — {c.expiry.isoformat()} ({c.dte} DTE)**',
             f'   Score: {s.total_score:.0f}/100 | Annualized: {fmt_pct(s.annualized_return)} | Premium: {fmt_money(s.premium_received)} | Cash required: {fmt_money(s.cash_required)}',
-            f'   Breakeven: ${s.breakeven:.2f} | Assignment discount: {fmt_pct(s.assignment_discount)} | Delta: {c.delta} | OI: {c.open_interest} | Vol: {c.volume} | Spread: {s.spread_pct:.1f}%',
+            f'   Breakeven: ${s.breakeven:.2f} | Assignment discount: {fmt_pct(s.assignment_discount)} | RSI14: {c.rsi_14 if c.rsi_14 is not None else "—"} | Delta: {c.delta} | OI: {c.open_interest} | Vol: {c.volume} | Spread: {s.spread_pct:.1f}%',
             ''
         ]
     lines += ['', '## Rejects / Landmines']

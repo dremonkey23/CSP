@@ -7,6 +7,7 @@ import yaml
 from .data_sources.tradier import TradierClient
 from .data_sources.alpaca import AlpacaClient
 from .data_sources.finnhub import FinnhubClient
+from .indicators import calculate_rsi
 from .scoring import score_candidate
 from .report import render_markdown
 
@@ -31,6 +32,12 @@ def main():
     all_scored=[]
     for ticker in cfg['universe']['tickers']:
         price=market_data.get_quote(ticker)
+        rsi_14=None
+        if hasattr(market_data, 'daily_closes'):
+            try:
+                rsi_14=calculate_rsi(market_data.daily_closes(ticker), 14)
+            except Exception:
+                rsi_14=None
         next_earn = earnings.next_earnings_date(ticker, today) if earnings else None
         for exp in market_data.expirations(ticker):
             exp_date=date.fromisoformat(exp)
@@ -38,6 +45,7 @@ def main():
             if not (cfg['filters']['min_dte'] <= dte <= cfg['filters']['max_dte']):
                 continue
             for cand in market_data.chain(ticker, exp, price):
+                cand.rsi_14=rsi_14
                 cand.earnings_date=next_earn
                 all_scored.append(score_candidate(cand, cfg, today))
     out_dir=Path('reports'); out_dir.mkdir(exist_ok=True)

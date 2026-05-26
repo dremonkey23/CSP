@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import re
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -73,6 +73,15 @@ class AlpacaClient:
         if bid and ask:
             return (bid + ask) / 2
         return ask or bid
+
+    def daily_closes(self, symbol: str, days: int = 90) -> list[float]:
+        start = (date.today() - timedelta(days=days * 2)).isoformat()
+        data = self._get_json(
+            f'{self.data_base}/stocks/{symbol}/bars',
+            params={'timeframe': '1Day', 'start': start, 'adjustment': 'raw', 'limit': days},
+        )
+        bars = data.get('bars') or []
+        return [float(x.get('c')) for x in bars if x.get('c') is not None]
 
     def _fetch_put_snapshots(self, symbol: str, limit: int = 1000, max_pages: int = 3) -> dict[str, Any]:
         if symbol in self._snapshot_cache:

@@ -1,6 +1,6 @@
 from __future__ import annotations
 import os, requests
-from datetime import date
+from datetime import date, timedelta
 from csp_radar.models import OptionCandidate
 
 BASE = 'https://api.tradier.com/v1'
@@ -17,6 +17,20 @@ class TradierClient:
         r.raise_for_status()
         q = (r.json().get('quotes') or {}).get('quote') or {}
         return float(q.get('last') or q.get('bid') or q.get('ask'))
+
+    def daily_closes(self, symbol: str, days: int = 90) -> list[float]:
+        start = (date.today() - timedelta(days=days * 2)).isoformat()
+        r = requests.get(
+            f'{BASE}/markets/history',
+            headers=self.headers,
+            params={'symbol': symbol, 'interval': 'daily', 'start': start},
+            timeout=20,
+        )
+        r.raise_for_status()
+        day = ((r.json().get('history') or {}).get('day')) or []
+        if isinstance(day, dict):
+            day = [day]
+        return [float(x.get('close')) for x in day if x.get('close') is not None]
 
     def expirations(self, symbol: str) -> list[str]:
         r = requests.get(f'{BASE}/markets/options/expirations', headers=self.headers, params={'symbol': symbol, 'includeAllRoots': 'false', 'strikes': 'false'}, timeout=20)
