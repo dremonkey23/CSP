@@ -179,7 +179,7 @@
       return [...rows].sort((a, b) => {
         const av = a[key];
         const bv = b[key];
-        if (key === 'ticker' || key === 'reject_reason') {
+        if (key === 'ticker' || key === 'reject_reason' || key === 'earnings_date') {
           return String(av || '').localeCompare(String(bv || '')) * dir;
         }
         const an = Number(av ?? (dir === 1 ? Infinity : -Infinity));

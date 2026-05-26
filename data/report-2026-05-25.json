@@ -1,8 +1,8 @@
 {
   "date": "2026-05-25",
   "source_file": "/home/runner/work/CSP/CSP/reports/2026-05-25.json",
-  "updated_at_epoch": 1779757592.5918055,
-  "updated_at": "2026-05-25 21:06:32 EDT",
+  "updated_at_epoch": 1779758378.4703074,
+  "updated_at": "2026-05-25 21:19:38 EDT",
   "stats": {
     "total_candidates": 5864,
     "accepted_count": 400,
@@ -12485,37 +12485,19 @@
   },
   "change_summary": {
     "available": true,
-    "previous_updated_at": "2026-05-25 15:15:37 EDT",
-    "changed_visible_rows": 300,
+    "previous_updated_at": "2026-05-25 21:06:32 EDT",
+    "changed_visible_rows": 0,
     "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
+      "best_overall": 0,
+      "highest_premium": 0,
+      "best_assignment": 0,
       "rejects": 0
     },
     "accepted_delta": 0,
     "rejected_delta": 0,
     "symbols_delta": 0,
-    "new_top_10": [
-      "MSTR 150.0P 2026-06-18",
-      "COIN 175.0P 2026-06-18",
-      "MSTR 133.0P 2026-06-18",
-      "MSTR 130.0P 2026-06-18",
-      "MSTR 135.0P 2026-06-18",
-      "MSTR 125.0P 2026-06-18",
-      "MSTR 140.0P 2026-06-18",
-      "COIN 160.0P 2026-06-18"
-    ],
-    "dropped_top_10": [
-      "ARM 270.0P 2026-06-18",
-      "AMD 380.0P 2026-06-18",
-      "AMD 390.0P 2026-06-18",
-      "AMD 400.0P 2026-06-18",
-      "ARM 230.0P 2026-06-18",
-      "AMD 370.0P 2026-06-18",
-      "AMD 410.0P 2026-06-18",
-      "ARM 255.0P 2026-06-18"
-    ],
-    "materially_unchanged": false
+    "new_top_10": [],
+    "dropped_top_10": [],
+    "materially_unchanged": true
   }
 }
