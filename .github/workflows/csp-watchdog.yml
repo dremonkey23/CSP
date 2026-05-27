@@ -1,11 +1,10 @@
 name: CSP Radar watchdog
 
 on:
+  # Manual-only safety check. Hermes is the sole scheduler for CSP refreshes;
+  # leaving GitHub cron enabled caused delayed watchdog runs to dispatch extra
+  # mid-window refreshes beyond the intended 2x/day cadence.
   workflow_dispatch:
-  schedule:
-    # GitHub cron uses UTC. During EDT: 10:30 AM ET = 14:30 UTC, 3:30 PM ET = 19:30 UTC.
-    # This does not run the scanner unless the scheduled refresh is stale/failed/missed.
-    - cron: '30 14,19 * * 1-5'
 
 permissions:
   actions: write
