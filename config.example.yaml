@@ -1,10 +1,10 @@
 universe:
   mode: curated_watchlist
   categories:
-    quality_core: [NVDA, AMD, AAPL, MSFT, GOOGL, AMZN, META, AVGO, TSM, ORCL, CRM, NOW, PANW, CRWD, SNOW, COST, V, MA]
-    growth_premium: [TSLA, PLTR, SOFI, HOOD, ARM, RIVN, AFRM, SHOP, NET, DDOG, MDB, U, ROKU, SE, DKNG, APP, SMCI]
+    quality_core: [NVDA, AMD, AAPL, MSFT, GOOGL, AMZN, META, AVGO, TSM, ORCL, CRM, NOW, PANW, CRWD, SNOW, COST, V, MA, LRCX, ASML, MU, INTU]
+    growth_premium: [TSLA, PLTR, SOFI, HOOD, ARM, RIVN, AFRM, SHOP, NET, DDOG, MDB, U, ROKU, SE, DKNG, APP, SMCI, CELH, TTD]
     crypto_beta: [COIN, MSTR, IBIT, MARA, RIOT, CLSK, HUT, IREN]
-    index_etf: [SPY, QQQ, IWM, SMH, XLK, XLE, ARKK, TLT, DIA]
+    index_etf: [SPY, QQQ, IWM, SMH, XLK, XLE, ARKK, TLT, DIA, XLF, XBI]
 
 providers:
   options: tradier
