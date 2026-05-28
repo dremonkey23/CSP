@@ -17,6 +17,7 @@ class OptionCandidate:
     volume: int | None
     rsi_14: float | None = None
     earnings_date: date | None = None
+    category: str | None = None
 
 @dataclass
 class ScoredCandidate:

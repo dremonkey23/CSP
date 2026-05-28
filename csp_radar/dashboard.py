@@ -63,6 +63,7 @@ def summarize_item(row: dict) -> dict:
         'volume': c.get('volume'),
         'rsi_14': c.get('rsi_14'),
         'earnings_date': c.get('earnings_date'),
+        'category': c.get('category') or 'uncategorized',
         'cash_required': money(row.get('cash_required')),
         'premium_received': money(row.get('premium_received')),
         'breakeven': money(row.get('breakeven')),
@@ -125,6 +126,10 @@ def build_payload(date_str: str | None = None) -> dict:
     missing_delta_pct = round((missing_delta / len(items) * 100), 1) if items else 0
     missing_oi_pct = round((missing_oi / len(items) * 100), 1) if items else 0
     symbols = sorted({x.get('ticker') for x in items if x.get('ticker')})
+    category_counts: dict[str, int] = {}
+    for x in accepted:
+        category = x.get('category') or 'uncategorized'
+        category_counts[category] = category_counts.get(category, 0) + 1
     if missing_oi_pct == 0 and missing_delta_pct <= 5:
         data_quality_note = 'Tradier mode: Greeks/open interest are present for nearly all contracts. Rankings are higher-confidence than Alpaca bridge mode.'
     elif missing_delta or missing_oi:
@@ -147,6 +152,7 @@ def build_payload(date_str: str | None = None) -> dict:
             'missing_open_interest_pct': missing_oi_pct,
             'reject_reasons': sorted(reject_reasons.items(), key=lambda kv: kv[1], reverse=True)[:10],
             'data_quality_note': data_quality_note,
+            'category_counts': sorted(category_counts.items(), key=lambda kv: kv[0]),
         },
         'sections': {
             'best_overall': cap_per_ticker(accepted_by_score, max_per_ticker=3, limit=100),

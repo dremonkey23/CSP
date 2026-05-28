@@ -12,6 +12,41 @@ from .indicators import calculate_rsi
 from .scoring import score_candidate
 from .report import render_markdown
 
+
+def universe_tickers(cfg: dict) -> tuple[list[str], dict[str, str]]:
+    """Return a deduped ticker list plus optional category metadata.
+
+    Supports the original flat `universe.tickers` config and the newer
+    curated `universe.categories` shape used to keep the watchlist broad
+    without turning it into an unbounded noisy scan.
+    """
+    universe = cfg.get('universe') or {}
+    seen: set[str] = set()
+    tickers: list[str] = []
+    categories: dict[str, str] = {}
+
+    for category, symbols in (universe.get('categories') or {}).items():
+        for symbol in symbols or []:
+            ticker = str(symbol).upper().strip()
+            if not ticker:
+                continue
+            categories.setdefault(ticker, str(category))
+            if ticker not in seen:
+                seen.add(ticker)
+                tickers.append(ticker)
+
+    for symbol in universe.get('tickers') or []:
+        ticker = str(symbol).upper().strip()
+        if not ticker or ticker in seen:
+            continue
+        seen.add(ticker)
+        tickers.append(ticker)
+
+    if not tickers:
+        raise RuntimeError('No universe tickers configured')
+    return tickers, categories
+
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--config', default='config.yaml')
@@ -32,7 +67,8 @@ def main():
         pass
     earnings_clients.append(NasdaqEarningsClient())
     all_scored=[]
-    for ticker in cfg['universe']['tickers']:
+    tickers, ticker_categories = universe_tickers(cfg)
+    for ticker in tickers:
         price=market_data.get_quote(ticker)
         rsi_14=None
         if hasattr(market_data, 'daily_closes'):
@@ -53,6 +89,7 @@ def main():
             for cand in market_data.chain(ticker, exp, price):
                 cand.rsi_14=rsi_14
                 cand.earnings_date=next_earn
+                cand.category=ticker_categories.get(ticker)
                 all_scored.append(score_candidate(cand, cfg, today))
     out_dir=Path('reports'); out_dir.mkdir(exist_ok=True)
     md=render_markdown(all_scored, cfg.get('ranking',{}).get('top_n',10))

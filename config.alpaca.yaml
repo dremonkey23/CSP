@@ -1,6 +1,10 @@
 universe:
-  mode: watchlist
-  tickers: [NVDA, AMD, PLTR, SOFI, HOOD, COIN, TSLA, META, AMZN, GOOGL, MSFT, AAPL, ARM, AVGO, MSTR, RIVN, AFRM]
+  mode: curated_watchlist
+  categories:
+    quality_core: [NVDA, AMD, AAPL, MSFT, GOOGL, AMZN, META, AVGO, TSM, ORCL, CRM, NOW, PANW, CRWD, SNOW, COST, V, MA]
+    growth_premium: [TSLA, PLTR, SOFI, HOOD, ARM, RIVN, AFRM, SHOP, NET, DDOG, MDB, U, ROKU, SE, DKNG, APP, SMCI]
+    crypto_beta: [COIN, MSTR, IBIT, MARA, RIOT, CLSK, HUT, IREN]
+    index_etf: [SPY, QQQ, IWM, SMH, XLK, XLE, ARKK, TLT, DIA]
 
 providers:
   options: alpaca

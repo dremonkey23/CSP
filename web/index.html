@@ -119,7 +119,7 @@
       <table>
         <thead>
           <tr>
-            <th class="sortable" data-sort="ticker">Ticker</th><th class="sortable" data-sort="strike">Contract</th><th class="sortable" data-sort="total_score">Score</th><th class="sortable" data-sort="annualized_return">Annualized</th><th class="sortable" data-sort="premium_received">Premium</th><th class="sortable" data-sort="cash_required">Cash Req.</th><th class="sortable" data-sort="breakeven">Breakeven</th><th class="sortable" data-sort="assignment_discount">Assign Disc.</th><th class="sortable" data-sort="rsi_14">RSI14</th><th class="sortable" data-sort="earnings_date">Earnings</th><th class="sortable" data-sort="spread_pct">Spread</th><th class="sortable" data-sort="volume">Vol</th><th class="sortable" data-sort="delta">Delta</th><th class="sortable" data-sort="open_interest">OI</th><th class="sortable" data-sort="reject_reason">Risk / Reject</th>
+            <th class="sortable" data-sort="ticker">Ticker</th><th class="sortable" data-sort="category">Category</th><th class="sortable" data-sort="strike">Contract</th><th class="sortable" data-sort="total_score">Score</th><th class="sortable" data-sort="annualized_return">Annualized</th><th class="sortable" data-sort="premium_received">Premium</th><th class="sortable" data-sort="cash_required">Cash Req.</th><th class="sortable" data-sort="breakeven">Breakeven</th><th class="sortable" data-sort="assignment_discount">Assign Disc.</th><th class="sortable" data-sort="rsi_14">RSI14</th><th class="sortable" data-sort="earnings_date">Earnings</th><th class="sortable" data-sort="spread_pct">Spread</th><th class="sortable" data-sort="volume">Vol</th><th class="sortable" data-sort="delta">Delta</th><th class="sortable" data-sort="open_interest">OI</th><th class="sortable" data-sort="reject_reason">Risk / Reject</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
@@ -179,7 +179,7 @@
       return [...rows].sort((a, b) => {
         const av = a[key];
         const bv = b[key];
-        if (key === 'ticker' || key === 'reject_reason' || key === 'earnings_date') {
+        if (key === 'ticker' || key === 'category' || key === 'reject_reason' || key === 'earnings_date') {
           return String(av || '').localeCompare(String(bv || '')) * dir;
         }
         const an = Number(av ?? (dir === 1 ? Infinity : -Infinity));
@@ -213,6 +213,7 @@
         const scoreClass = r.reject_reason ? 'bad' : (r.total_score >= 75 ? 'good' : (r.total_score >= 60 ? 'warn' : ''));
         tr.innerHTML = `
           <td><span class="ticker">${r.ticker}</span><br><span class="muted">Stock ${fmtMoney(r.stock_price)}</span></td>
+          <td><span class="pill">${(r.category || 'uncategorized').replace('_', ' ')}</span></td>
           <td><span class="pill">$${r.strike}P</span><br><span class="muted">${r.expiry} · ${r.dte} DTE</span></td>
           <td class="score ${scoreClass}">${Number(r.total_score).toFixed(0)}</td>
           <td>${fmtPct(r.annualized_return)}</td>
