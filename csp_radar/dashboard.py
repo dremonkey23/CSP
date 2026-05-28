@@ -81,6 +81,23 @@ def summarize_item(row: dict) -> dict:
     }
 
 
+def cap_per_ticker(rows: list[dict], *, max_per_ticker: int = 3, limit: int = 100) -> list[dict]:
+    """Keep ranked rows diversified without changing the underlying scan scores."""
+    counts: dict[str, int] = {}
+    capped: list[dict] = []
+    for row in rows:
+        ticker = (row.get('ticker') or '').upper()
+        if ticker:
+            seen = counts.get(ticker, 0)
+            if seen >= max_per_ticker:
+                continue
+            counts[ticker] = seen + 1
+        capped.append(row)
+        if len(capped) >= limit:
+            break
+    return capped
+
+
 def build_payload(date_str: str | None = None) -> dict:
     path, rows = load_report(date_str)
     items = [summarize_item(r) for r in rows]
@@ -132,9 +149,9 @@ def build_payload(date_str: str | None = None) -> dict:
             'data_quality_note': data_quality_note,
         },
         'sections': {
-            'best_overall': accepted_by_score[:100],
-            'highest_premium': high_premium[:100],
-            'best_assignment': best_assignment[:100],
+            'best_overall': cap_per_ticker(accepted_by_score, max_per_ticker=3, limit=100),
+            'highest_premium': cap_per_ticker(high_premium, max_per_ticker=3, limit=100),
+            'best_assignment': cap_per_ticker(best_assignment, max_per_ticker=3, limit=100),
             'rejects': sorted(rejects, key=lambda x: x['total_score'], reverse=True)[:100],
         },
     }
