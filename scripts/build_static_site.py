@@ -129,19 +129,36 @@ def main() -> None:
 
     previous = load_json_source(args.previous)
 
-    # Keep the reports list compact and static-friendly.
-    (data_dir / 'reports.json').write_text(json.dumps(reports, indent=2) + '\n')
-
     latest_payload = None
+    static_reports = []
     for report in reports:
         payload = build_payload(report['date'])
         if latest_payload is None:
             payload = attach_change_summary(payload, previous)
             latest_payload = payload
-        (data_dir / f"report-{report['date']}.json").write_text(json.dumps(payload, indent=2) + '\n')
+        (data_dir / f"report-{payload['date']}.json").write_text(json.dumps(payload, indent=2) + '\n')
+        static_reports.append({
+            'date': payload['date'],
+            'file': payload.get('source_file') or report.get('file'),
+            'bytes': report.get('bytes'),
+            'updated_at': payload.get('updated_at') or report.get('updated_at'),
+        })
 
     if latest_payload is None:
         raise SystemExit('No payload generated.')
+
+    latest_date = latest_payload['date']
+    if not any(r.get('date') == latest_date for r in static_reports):
+        static_reports.insert(0, {
+            'date': latest_date,
+            'file': latest_payload.get('source_file'),
+            'bytes': None,
+            'updated_at': latest_payload.get('updated_at'),
+        })
+
+    # Keep the reports list compact and static-friendly. Build it from the
+    # actual generated payloads so it cannot lag behind report-latest.json.
+    (data_dir / 'reports.json').write_text(json.dumps(static_reports, indent=2) + '\n')
     (data_dir / 'report-latest.json').write_text(json.dumps(latest_payload, indent=2) + '\n')
 
     source_html = Path(args.web).read_text()
