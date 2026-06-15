@@ -158,7 +158,12 @@ def main() -> None:
 
     # Keep the reports list compact and static-friendly. Build it from the
     # actual generated payloads so it cannot lag behind report-latest.json.
-    (data_dir / 'reports.json').write_text(json.dumps(static_reports, indent=2) + '\n')
+    reports_path = data_dir / 'reports.json'
+    reports_path.write_text(json.dumps(static_reports, indent=2) + '\n')
+    written_reports = json.loads(reports_path.read_text())
+    written_dates = [r.get('date') for r in written_reports]
+    if latest_date not in written_dates:
+        raise SystemExit(f'reports.json missing latest report date {latest_date}; dates={written_dates}')
     (data_dir / 'report-latest.json').write_text(json.dumps(latest_payload, indent=2) + '\n')
 
     source_html = Path(args.web).read_text()
@@ -167,7 +172,7 @@ def main() -> None:
 
     change = latest_payload.get('change_summary', {})
     change_msg = f"changes={change.get('changed_visible_rows')}" if change.get('available') else 'changes=baseline'
-    print(f"built static site in {out} from {len(reports)} report(s); latest={latest_payload['date']}; {change_msg}")
+    print(f"built static site in {out} from {len(reports)} report(s); latest={latest_payload['date']}; report_dates={written_dates}; {change_msg}")
 
 
 if __name__ == '__main__':
