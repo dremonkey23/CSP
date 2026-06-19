@@ -1,8 +1,8 @@
 {
   "date": "2026-06-19",
   "source_file": "/home/runner/work/CSP/CSP/reports/2026-06-19.json",
-  "updated_at_epoch": 1781878718.221834,
-  "updated_at": "2026-06-19 10:18:38 EDT",
+  "updated_at_epoch": 1781893069.6206875,
+  "updated_at": "2026-06-19 14:17:49 EDT",
   "stats": {
     "total_candidates": 18285,
     "accepted_count": 982,
@@ -12946,27 +12946,19 @@
   },
   "change_summary": {
     "available": true,
-    "previous_updated_at": "2026-06-18 14:17:42 EDT",
-    "changed_visible_rows": 400,
+    "previous_updated_at": "2026-06-19 10:18:38 EDT",
+    "changed_visible_rows": 0,
     "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
+      "best_overall": 0,
+      "highest_premium": 0,
+      "best_assignment": 0,
+      "rejects": 0
     },
-    "accepted_delta": -341,
-    "rejected_delta": -4859,
+    "accepted_delta": 0,
+    "rejected_delta": 0,
     "symbols_delta": 0,
-    "new_top_10": [
-      "MSTR 105.0P 2026-07-17",
-      "IREN 55.0P 2026-07-17",
-      "HUT 110.0P 2026-07-17"
-    ],
-    "dropped_top_10": [
-      "MSTR 90.0P 2026-07-17",
-      "IREN 48.0P 2026-07-17",
-      "ARM 350.0P 2026-07-17"
-    ],
-    "materially_unchanged": false
+    "new_top_10": [],
+    "dropped_top_10": [],
+    "materially_unchanged": true
   }
 }
