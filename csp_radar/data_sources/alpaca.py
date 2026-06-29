@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import re
+from math import erf, exp, log, sqrt
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
@@ -21,6 +22,77 @@ CREDS_RE = re.compile(
     re.S,
 )
 OCC_RE = re.compile(r'^(?P<root>.+?)(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})(?P<cp>[CP])(?P<strike>\d{8})$')
+
+
+def _norm_cdf(x: float) -> float:
+    return 0.5 * (1.0 + erf(x / sqrt(2.0)))
+
+
+def _bs_put_price_delta(
+    stock_price: float,
+    strike: float,
+    dte: int,
+    sigma: float,
+    risk_free_rate: float = 0.045,
+) -> tuple[float, float] | None:
+    """Return Black-Scholes put price and delta for fallback Greeks.
+
+    Alpaca free/basic options snapshots give bid/ask but often omit Greeks. We
+    solve an implied volatility from the observed mid and use that to display a
+    model delta. This is lower-confidence than provider Greeks, but much better
+    than rendering a broken all-blank Delta column.
+    """
+    if stock_price <= 0 or strike <= 0 or dte <= 0 or sigma <= 0:
+        return None
+    t = dte / 365.0
+    if t <= 0:
+        return None
+    vol_t = sigma * sqrt(t)
+    if vol_t <= 0:
+        return None
+    d1 = (log(stock_price / strike) + (risk_free_rate + 0.5 * sigma * sigma) * t) / vol_t
+    d2 = d1 - vol_t
+    put = strike * exp(-risk_free_rate * t) * _norm_cdf(-d2) - stock_price * _norm_cdf(-d1)
+    delta = _norm_cdf(d1) - 1.0
+    return put, delta
+
+
+def _estimate_put_delta(stock_price: float, strike: float, dte: int, mid: float) -> tuple[float | None, float | None]:
+    """Estimate put delta and IV from market mid using bisection.
+
+    Returns (delta, iv). If the market price is outside sane Black-Scholes
+    bounds, returns (None, None) rather than inventing a misleading value.
+    """
+    if stock_price <= 0 or strike <= 0 or dte <= 0 or mid <= 0:
+        return None, None
+    intrinsic = max(strike - stock_price, 0.0)
+    # Allow a small tolerance because quotes are noisy and markets can be wide.
+    if mid < intrinsic - 0.05 or mid > strike:
+        return None, None
+
+    lo, hi = 0.01, 5.0
+    lo_price = _bs_put_price_delta(stock_price, strike, dte, lo)
+    hi_price = _bs_put_price_delta(stock_price, strike, dte, hi)
+    if not lo_price or not hi_price or mid < lo_price[0] - 0.05 or mid > hi_price[0] + 0.05:
+        return None, None
+
+    for _ in range(60):
+        sigma = (lo + hi) / 2.0
+        priced = _bs_put_price_delta(stock_price, strike, dte, sigma)
+        if not priced:
+            return None, None
+        price, _ = priced
+        if price < mid:
+            lo = sigma
+        else:
+            hi = sigma
+
+    iv = (lo + hi) / 2.0
+    priced = _bs_put_price_delta(stock_price, strike, dte, iv)
+    if not priced:
+        return None, None
+    _, delta = priced
+    return delta, iv
 
 
 class AlpacaClient:
@@ -143,19 +215,22 @@ class AlpacaClient:
             daily = snap.get('dailyBar') or {}
             prev_daily = snap.get('prevDailyBar') or {}
             volume = int(daily.get('v') or prev_daily.get('v') or trade.get('s') or 0)
+            dte = (opt_exp - today).days
+            delta, iv = _estimate_put_delta(stock_price, strike, dte, mid)
 
             out.append(OptionCandidate(
                 ticker=symbol,
                 stock_price=stock_price,
                 expiry=opt_exp,
-                dte=(opt_exp - today).days,
+                dte=dte,
                 strike=strike,
                 bid=bid,
                 ask=ask,
                 mid=mid,
-                # Not reliably present in Alpaca free/basic options snapshots.
-                delta=None,
-                iv=None,
+                # Alpaca free/basic snapshots omit Greeks. Fill display/ranking
+                # with a model-estimated delta/IV from the live bid/ask mid.
+                delta=delta,
+                iv=iv,
                 open_interest=None,
                 volume=volume,
             ))
