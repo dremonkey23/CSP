@@ -135,6 +135,7 @@
     const fmtPct = v => (Number(v || 0) * 100).toFixed(1) + '%';
     const fmtSpread = v => Number(v || 0).toFixed(1) + '%';
     const fmtNum = v => v === null || v === undefined ? '—' : Number(v).toLocaleString();
+    const fmtDelta = v => v === null || v === undefined || Number.isNaN(Number(v)) ? '—' : Number(v).toFixed(3);
     const el = id => document.getElementById(id);
     let sortState = { key: 'section', dir: 'desc' };
 
@@ -225,7 +226,7 @@
           <td>${r.earnings_date || '—'}</td>
           <td class="${r.spread_pct > 20 ? 'warn' : ''}">${fmtSpread(r.spread_pct)}</td>
           <td>${fmtNum(r.volume)}</td>
-          <td>${r.delta ?? '—'}</td>
+          <td>${fmtDelta(r.delta)}</td>
           <td>${fmtNum(r.open_interest)}</td>
           <td class="${r.reject_reason ? 'bad' : 'muted'}">${r.reject_reason || 'clear'}</td>
         `;
