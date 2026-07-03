@@ -12943,44 +12943,5 @@
         "reject_reason": "strike not OTM"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-07-02 10:17:10 EDT",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 294,
-    "rejected_delta": -294,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "IREN 33.0P 2026-07-17",
-      "IREN 32.0P 2026-07-17",
-      "IREN 30.0P 2026-07-17",
-      "MU 800.0P 2026-07-17",
-      "MU 820.0P 2026-07-17",
-      "MU 810.0P 2026-07-17",
-      "ARM 270.0P 2026-07-24",
-      "ARM 280.0P 2026-07-17",
-      "ARM 275.0P 2026-07-31",
-      "MSTR 90.0P 2026-07-31"
-    ],
-    "dropped_top_10": [
-      "IREN 35.0P 2026-07-17",
-      "IREN 35.0P 2026-07-31",
-      "IREN 36.0P 2026-07-17",
-      "MU 900.0P 2026-07-17",
-      "MU 910.0P 2026-07-17",
-      "HUT 90.0P 2026-07-17",
-      "MSTR 90.0P 2026-07-17",
-      "MSTR 90.0P 2026-07-24",
-      "RIVN 17.0P 2026-07-17",
-      "MSTR 85.0P 2026-08-07"
-    ],
-    "materially_unchanged": false
   }
 }
