@@ -12943,22 +12943,5 @@
         "reject_reason": "delta outside target range"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-07-03 10:16:45 EDT",
-    "changed_visible_rows": 100,
-    "section_changes": {
-      "best_overall": 0,
-      "highest_premium": 0,
-      "best_assignment": 0,
-      "rejects": 100
-    },
-    "accepted_delta": 0,
-    "rejected_delta": 0,
-    "symbols_delta": 0,
-    "new_top_10": [],
-    "dropped_top_10": [],
-    "materially_unchanged": false
   }
 }
