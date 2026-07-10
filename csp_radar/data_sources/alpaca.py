@@ -156,8 +156,10 @@ class AlpacaClient:
         snap = self._stock_snapshot_cache.get(symbol) or {}
         daily = snap.get('dailyBar') or {}
         prev_daily = snap.get('prevDailyBar') or {}
-        latest_trade = snap.get('latestTrade') or {}
-        price = float(latest_trade.get('p') or daily.get('c') or current_price or 0)
+        # Use the same current_price displayed in the report so Day % aligns
+        # with the stock price column. Snapshot latestTrade/dailyBar can lag or
+        # come from a different feed than latest quote on Alpaca Basic.
+        price = float(current_price or daily.get('c') or 0)
         prev = float(prev_daily.get('c') or 0) or None
         pct = ((price - prev) / prev) if prev else None
         return prev, pct
