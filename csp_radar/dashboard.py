@@ -62,6 +62,8 @@ def summarize_item(row: dict) -> dict:
         'open_interest': c.get('open_interest'),
         'volume': c.get('volume'),
         'rsi_14': c.get('rsi_14'),
+        'previous_close': c.get('previous_close'),
+        'day_change_pct': c.get('day_change_pct'),
         'earnings_date': c.get('earnings_date'),
         'category': c.get('category') or 'uncategorized',
         'cash_required': money(row.get('cash_required')),

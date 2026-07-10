@@ -131,6 +131,7 @@ class AlpacaClient:
             'APCA-API-SECRET-KEY': self.secret,
         })
         self._snapshot_cache: dict[str, dict[str, Any]] = {}
+        self._stock_snapshot_cache: dict[str, dict[str, Any]] = {}
 
     def _get_json(self, url: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
         r = self.session.get(url, params=params, timeout=30)
@@ -145,6 +146,21 @@ class AlpacaClient:
         if bid and ask:
             return (bid + ask) / 2
         return ask or bid
+
+    def stock_day_change(self, symbol: str, current_price: float) -> tuple[float | None, float | None]:
+        if symbol not in self._stock_snapshot_cache:
+            try:
+                self._stock_snapshot_cache[symbol] = self._get_json(f'{self.data_base}/stocks/{symbol}/snapshot')
+            except Exception:
+                self._stock_snapshot_cache[symbol] = {}
+        snap = self._stock_snapshot_cache.get(symbol) or {}
+        daily = snap.get('dailyBar') or {}
+        prev_daily = snap.get('prevDailyBar') or {}
+        latest_trade = snap.get('latestTrade') or {}
+        price = float(latest_trade.get('p') or daily.get('c') or current_price or 0)
+        prev = float(prev_daily.get('c') or 0) or None
+        pct = ((price - prev) / prev) if prev else None
+        return prev, pct
 
     def daily_closes(self, symbol: str, days: int = 90) -> list[float]:
         start = (date.today() - timedelta(days=days * 2)).isoformat()

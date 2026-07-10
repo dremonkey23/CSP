@@ -16,6 +16,8 @@ class OptionCandidate:
     open_interest: int | None
     volume: int | None
     rsi_14: float | None = None
+    previous_close: float | None = None
+    day_change_pct: float | None = None
     earnings_date: date | None = None
     category: str | None = None
 

@@ -70,6 +70,13 @@ def main():
     tickers, ticker_categories = universe_tickers(cfg)
     for ticker in tickers:
         price=market_data.get_quote(ticker)
+        previous_close=None
+        day_change_pct=None
+        if hasattr(market_data, 'stock_day_change'):
+            try:
+                previous_close, day_change_pct = market_data.stock_day_change(ticker, price)
+            except Exception:
+                previous_close, day_change_pct = None, None
         rsi_14=None
         if hasattr(market_data, 'daily_closes'):
             try:
@@ -88,6 +95,8 @@ def main():
                 continue
             for cand in market_data.chain(ticker, exp, price):
                 cand.rsi_14=rsi_14
+                cand.previous_close=previous_close
+                cand.day_change_pct=day_change_pct
                 cand.earnings_date=next_earn
                 cand.category=ticker_categories.get(ticker)
                 all_scored.append(score_candidate(cand, cfg, today))

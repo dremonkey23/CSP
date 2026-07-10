@@ -34,6 +34,30 @@ def rsi_entry_score(rsi: float | None) -> float:
         return 25.0
     return 5.0
 
+
+
+def day_move_entry_score(day_change_pct: float | None) -> float:
+    """Same-day stock move timing score for CSP entries.
+
+    Red days often improve CSP entries by lifting premium and lowering the
+    assignment entry, but deep red days can be falling knives. Missing data is
+    neutral so quote/provider gaps do not distort rankings.
+    """
+    if day_change_pct is None:
+        return 50.0
+    pct = day_change_pct * 100
+    if pct <= -8:
+        return 45.0
+    if pct <= -4:
+        return 75.0
+    if pct <= -1:
+        return 100.0
+    if pct <= 1:
+        return 55.0
+    if pct <= 4:
+        return 35.0
+    return 15.0
+
 def score_candidate(c: OptionCandidate, cfg: dict, today: date) -> ScoredCandidate:
     filters = cfg.get('filters', {})
     mid = c.mid or ((c.bid + c.ask) / 2)
@@ -79,7 +103,7 @@ def score_candidate(c: OptionCandidate, cfg: dict, today: date) -> ScoredCandida
         if 0 <= e_days <= 14: event_score = 0.0
         elif 15 <= e_days <= 21: event_score = 65.0
 
-    technical_score = rsi_entry_score(c.rsi_14)
+    technical_score = 0.60 * rsi_entry_score(c.rsi_14) + 0.40 * day_move_entry_score(c.day_change_pct)
 
     total = 0.25 * premium_score + 0.25 * assignment_score + 0.20 * liquidity_score + 0.20 * event_score + 0.10 * technical_score
     if reject:

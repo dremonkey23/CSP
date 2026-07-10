@@ -55,6 +55,7 @@ def row_key(row: dict) -> tuple:
         row.get('strike'),
         round(float(row.get('total_score') or 0), 4),
         round(float(row.get('premium_received') or 0), 4),
+        round(float(row.get('day_change_pct') or 0), 5),
         row.get('delta'),
         row.get('open_interest'),
         row.get('reject_reason'),

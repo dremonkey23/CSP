@@ -11,12 +11,37 @@ class TradierClient:
         if not self.token:
             raise RuntimeError('Missing TRADIER_TOKEN or TRADIER_ACCESS_TOKEN')
         self.headers = {'Authorization': f'Bearer {self.token}', 'Accept': 'application/json'}
+        self._quote_cache = {}
+
+    def _quote(self, symbol: str) -> dict:
+        if symbol not in self._quote_cache:
+            r = requests.get(f'{BASE}/markets/quotes', headers=self.headers, params={'symbols': symbol}, timeout=20)
+            r.raise_for_status()
+            self._quote_cache[symbol] = (r.json().get('quotes') or {}).get('quote') or {}
+        return self._quote_cache[symbol]
+
+    @staticmethod
+    def _float_or_none(value) -> float | None:
+        if value is None or value == '':
+            return None
+        try:
+            return float(str(value).strip().rstrip('%'))
+        except Exception:
+            return None
 
     def get_quote(self, symbol: str) -> float:
-        r = requests.get(f'{BASE}/markets/quotes', headers=self.headers, params={'symbols': symbol}, timeout=20)
-        r.raise_for_status()
-        q = (r.json().get('quotes') or {}).get('quote') or {}
+        q = self._quote(symbol)
         return float(q.get('last') or q.get('bid') or q.get('ask'))
+
+    def stock_day_change(self, symbol: str, current_price: float) -> tuple[float | None, float | None]:
+        q = self._quote(symbol)
+        prev = self._float_or_none(q.get('prevclose') or q.get('previous_close') or q.get('prev_close'))
+        if prev:
+            return prev, (current_price - prev) / prev
+        pct = self._float_or_none(q.get('change_percentage') or q.get('change_pct'))
+        if pct is not None and abs(pct) > 1:
+            pct = pct / 100
+        return prev, pct
 
     def daily_closes(self, symbol: str, days: int = 90) -> list[float]:
         start = (date.today() - timedelta(days=days * 2)).isoformat()
