@@ -13743,38 +13743,5 @@
         "reject_reason": "delta outside target range"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-07-14 10:17:07 EDT",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 498,
-    "rejected_delta": -498,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "IREN 32.0P 2026-08-21",
-      "IREN 30.0P 2026-08-14",
-      "HUT 80.0P 2026-07-31",
-      "HUT 80.0P 2026-08-21",
-      "MU 850.0P 2026-07-31",
-      "MU 800.0P 2026-07-31",
-      "MU 850.0P 2026-08-21"
-    ],
-    "dropped_top_10": [
-      "IREN 31.0P 2026-08-21",
-      "IREN 30.0P 2026-08-21",
-      "HUT 85.0P 2026-08-07",
-      "MU 800.0P 2026-08-21",
-      "MU 800.0P 2026-08-07",
-      "MU 820.0P 2026-07-31",
-      "HUT 85.0P 2026-08-28"
-    ],
-    "materially_unchanged": false
   }
 }
