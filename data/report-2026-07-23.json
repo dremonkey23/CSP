@@ -13335,38 +13335,5 @@
         "reject_reason": "strike not OTM"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-07-23 10:16:43 EDT",
-    "changed_visible_rows": 388,
-    "section_changes": {
-      "best_overall": 96,
-      "highest_premium": 96,
-      "best_assignment": 96,
-      "rejects": 100
-    },
-    "accepted_delta": 128,
-    "rejected_delta": -128,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "IREN 33.0P 2026-08-21",
-      "IREN 32.0P 2026-08-21",
-      "MU 850.0P 2026-08-14",
-      "MU 850.0P 2026-08-07",
-      "SMCI 25.0P 2026-08-21",
-      "SMCI 26.5P 2026-08-21",
-      "ORCL 100.0P 2026-08-21"
-    ],
-    "dropped_top_10": [
-      "IREN 33.5P 2026-08-21",
-      "MU 815.0P 2026-08-07",
-      "IREN 30.5P 2026-08-21",
-      "MU 835.0P 2026-08-14",
-      "SMCI 27.5P 2026-08-21",
-      "SMCI 27.0P 2026-08-14",
-      "IBIT 30.0P 2026-08-21"
-    ],
-    "materially_unchanged": false
   }
 }
