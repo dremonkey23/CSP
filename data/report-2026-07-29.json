@@ -13029,40 +13029,5 @@
         "reject_reason": "strike not OTM"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-07-29 10:16:46 EDT",
-    "changed_visible_rows": 379,
-    "section_changes": {
-      "best_overall": 93,
-      "highest_premium": 93,
-      "best_assignment": 93,
-      "rejects": 100
-    },
-    "accepted_delta": 55,
-    "rejected_delta": -55,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "IREN 27.0P 2026-08-21",
-      "MU 650.0P 2026-08-21",
-      "MU 670.0P 2026-08-21",
-      "MU 660.0P 2026-08-14",
-      "ASML 1540.0P 2026-08-21",
-      "NVDA 155.0P 2026-08-21",
-      "ASML 1550.0P 2026-08-21",
-      "ASML 1535.0P 2026-08-21"
-    ],
-    "dropped_top_10": [
-      "MU 700.0P 2026-08-21",
-      "IREN 26.0P 2026-08-21",
-      "MU 665.0P 2026-08-14",
-      "MU 680.0P 2026-08-21",
-      "SMH 435.0P 2026-08-21",
-      "SMH 455.0P 2026-08-21",
-      "SMH 470.0P 2026-08-21",
-      "ORCL 110.0P 2026-08-21"
-    ],
-    "materially_unchanged": false
   }
 }
