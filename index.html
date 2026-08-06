@@ -141,20 +141,43 @@
 
     function setStatus(text, cls='') { el('status').textContent = text; el('status').className = cls; }
 
+    const RAW_PAGES_ROOT = 'https://raw.githubusercontent.com/dremonkey23/CSP/gh-pages/';
+    let dataSource = 'dashboard';
+
+    async function fetchFreshStatic(path) {
+      const stamp = Date.now();
+      const urls = [
+        RAW_PAGES_ROOT + path + '?v=' + stamp,
+        path + '?v=' + stamp,
+      ];
+      let lastError = null;
+      for (const url of urls) {
+        try {
+          const res = await fetch(url, { cache: 'no-store' });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          dataSource = url.startsWith(RAW_PAGES_ROOT) ? 'live branch' : 'dashboard';
+          return res;
+        } catch (error) {
+          lastError = error;
+        }
+      }
+      throw lastError || new Error('Failed loading dashboard data');
+    }
+
     async function loadReports() {
-      const res = await fetch('data/reports.json');
+      const res = await fetchFreshStatic('data/reports.json');
       return await res.json();
     }
 
     async function loadReport(date=null) {
       setStatus('Loading report…');
       const qs = date ? '?date=' + encodeURIComponent(date) : '';
-      const res = await fetch(date ? 'data/report-' + encodeURIComponent(date) + '.json' : 'data/report-latest.json');
+      const res = await fetchFreshStatic(date ? 'data/report-' + encodeURIComponent(date) + '.json' : 'data/report-latest.json');
       if (!res.ok) throw new Error((await res.json()).error || 'Failed loading report');
       payload = await res.json();
       renderStats();
       renderTable();
-      setStatus('Loaded ' + payload.date);
+      setStatus('Loaded ' + payload.date + (dataSource === 'live branch' ? ' · live branch' : ''));
     }
 
     function renderStats() {
