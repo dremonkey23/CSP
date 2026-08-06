@@ -17,8 +17,40 @@ from csp_radar.dashboard import build_payload, list_reports
 
 def make_static_html(source: str) -> str:
     html = source
-    html = html.replace("fetch('/api/reports')", "fetch('data/reports.json')")
-    html = html.replace("fetch('/api/report' + qs)", "fetch(date ? 'data/report-' + encodeURIComponent(date) + '.json' : 'data/report-latest.json')")
+    html = html.replace(
+        "    async function loadReports() {\n",
+        "    const RAW_PAGES_ROOT = 'https://raw.githubusercontent.com/dremonkey23/CSP/gh-pages/';\n"
+        "    let dataSource = 'dashboard';\n\n"
+        "    async function fetchFreshStatic(path) {\n"
+        "      const stamp = Date.now();\n"
+        "      const urls = [\n"
+        "        RAW_PAGES_ROOT + path + '?v=' + stamp,\n"
+        "        path + '?v=' + stamp,\n"
+        "      ];\n"
+        "      let lastError = null;\n"
+        "      for (const url of urls) {\n"
+        "        try {\n"
+        "          const res = await fetch(url, { cache: 'no-store' });\n"
+        "          if (!res.ok) throw new Error('HTTP ' + res.status);\n"
+        "          dataSource = url.startsWith(RAW_PAGES_ROOT) ? 'live branch' : 'dashboard';\n"
+        "          return res;\n"
+        "        } catch (error) {\n"
+        "          lastError = error;\n"
+        "        }\n"
+        "      }\n"
+        "      throw lastError || new Error('Failed loading dashboard data');\n"
+        "    }\n\n"
+        "    async function loadReports() {\n",
+    )
+    html = html.replace("fetch('/api/reports')", "fetchFreshStatic('data/reports.json')")
+    html = html.replace(
+        "fetch('/api/report' + qs)",
+        "fetchFreshStatic(date ? 'data/report-' + encodeURIComponent(date) + '.json' : 'data/report-latest.json')",
+    )
+    html = html.replace(
+        "setStatus('Loaded ' + payload.date);",
+        "setStatus('Loaded ' + payload.date + (dataSource === 'live branch' ? ' · live branch' : ''));",
+    )
     html = html.replace(
         'Private cash-secured put dashboard. Read-only. Ranks opportunity quality; cash required is metadata, not a filter.',
         'Private cash-secured put dashboard. Read-only static snapshot; data refreshes on the scheduled GitHub Actions workflow. Ranks opportunity quality; cash required is metadata, not a filter.',
@@ -168,7 +200,18 @@ def main() -> None:
     (data_dir / 'report-latest.json').write_text(json.dumps(latest_payload, indent=2) + '\n')
 
     source_html = Path(args.web).read_text()
-    (out / 'index.html').write_text(make_static_html(source_html))
+    static_html = make_static_html(source_html)
+    required_static_fragments = (
+        'RAW_PAGES_ROOT',
+        "fetchFreshStatic('data/reports.json')",
+        "fetchFreshStatic(date ? 'data/report-'",
+    )
+    missing_fragments = [fragment for fragment in required_static_fragments if fragment not in static_html]
+    if missing_fragments:
+        raise SystemExit(f'static dashboard freshness fallback missing: {missing_fragments}')
+    if "fetch('/api/" in static_html:
+        raise SystemExit('static dashboard still contains backend API fetches')
+    (out / 'index.html').write_text(static_html)
     (out / '.nojekyll').write_text('')
 
     change = latest_payload.get('change_summary', {})
