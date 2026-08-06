@@ -147,21 +147,30 @@
     async function fetchFreshStatic(path) {
       const stamp = Date.now();
       const urls = [
-        RAW_PAGES_ROOT + path + '?v=' + stamp,
-        path + '?v=' + stamp,
+        { source: 'live branch', url: RAW_PAGES_ROOT + path + '?v=' + stamp },
+        { source: 'dashboard', url: path + '?v=' + stamp },
       ];
-      let lastError = null;
-      for (const url of urls) {
+      const attempts = await Promise.all(urls.map(async candidate => {
         try {
-          const res = await fetch(url, { cache: 'no-store' });
+          const res = await fetch(candidate.url, { cache: 'no-store' });
           if (!res.ok) throw new Error('HTTP ' + res.status);
-          dataSource = url.startsWith(RAW_PAGES_ROOT) ? 'live branch' : 'dashboard';
-          return res;
+          return { ...candidate, data: await res.json() };
         } catch (error) {
-          lastError = error;
+          return { ...candidate, error };
         }
+      }));
+      const valid = attempts.filter(candidate => candidate.data);
+      if (!valid.length) {
+        throw attempts[0].error || attempts[1].error || new Error('Failed loading dashboard data');
       }
-      throw lastError || new Error('Failed loading dashboard data');
+      const timestamp = candidate => {
+        const data = candidate.data;
+        return String(Array.isArray(data) ? (data[0]?.updated_at || '') : (data.updated_at || ''));
+      };
+      valid.sort((a, b) => timestamp(b).localeCompare(timestamp(a)));
+      const selected = valid[0];
+      dataSource = selected.source;
+      return { ok: true, json: async () => selected.data };
     }
 
     async function loadReports() {
