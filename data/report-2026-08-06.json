@@ -13743,28 +13743,5 @@
         "reject_reason": "bid below minimum"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-08-06 15:25:21 EDT",
-    "changed_visible_rows": 398,
-    "section_changes": {
-      "best_overall": 99,
-      "highest_premium": 100,
-      "best_assignment": 99,
-      "rejects": 100
-    },
-    "accepted_delta": 8,
-    "rejected_delta": -8,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "HUT 80.0P 2026-08-28",
-      "IREN 33.0P 2026-08-21"
-    ],
-    "dropped_top_10": [
-      "HUT 85.0P 2026-09-04",
-      "IREN 33.0P 2026-09-11"
-    ],
-    "materially_unchanged": false
   }
 }
