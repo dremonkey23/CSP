@@ -13743,40 +13743,5 @@
         "reject_reason": "bid below minimum"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-08-12 10:17:55 EDT",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 545,
-    "rejected_delta": -545,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "HUT 83.0P 2026-09-11",
-      "HUT 84.0P 2026-09-11",
-      "HUT 83.0P 2026-09-04",
-      "RIOT 18.0P 2026-09-04",
-      "MSTR 80.0P 2026-09-18",
-      "SMCI 32.0P 2026-09-18",
-      "MARA 8.0P 2026-09-25",
-      "ORCL 125.0P 2026-09-18"
-    ],
-    "dropped_top_10": [
-      "HUT 85.0P 2026-09-25",
-      "HUT 75.0P 2026-09-18",
-      "HUT 85.0P 2026-09-18",
-      "IREN 38.0P 2026-09-18",
-      "ORCL 130.0P 2026-09-18",
-      "RIOT 17.0P 2026-09-18",
-      "IREN 38.0P 2026-09-04",
-      "IREN 40.0P 2026-09-18"
-    ],
-    "materially_unchanged": false
   }
 }
