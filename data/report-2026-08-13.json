@@ -13743,30 +13743,5 @@
         "reject_reason": "spread too wide (113.3%)"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-08-13 13:12:10 EDT",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 53,
-    "rejected_delta": -53,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "HUT 80.0P 2026-09-18",
-      "MARA 7.5P 2026-09-25",
-      "RIOT 16.0P 2026-09-18"
-    ],
-    "dropped_top_10": [
-      "MARA 8.5P 2026-08-28",
-      "RIOT 18.0P 2026-09-04",
-      "ORCL 125.0P 2026-09-18"
-    ],
-    "materially_unchanged": false
   }
 }
