@@ -13743,36 +13743,5 @@
         "reject_reason": "spread too wide (78.3%)"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-08-21 10:18:30 EDT",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 543,
-    "rejected_delta": -543,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "HUT 70.0P 2026-09-18",
-      "CLSK 10.0P 2026-09-18",
-      "CLSK 11.0P 2026-09-25",
-      "HUT 70.0P 2026-09-25",
-      "HUT 70.0P 2026-10-02",
-      "MARA 9.0P 2026-09-18"
-    ],
-    "dropped_top_10": [
-      "MARA 10.0P 2026-09-04",
-      "MARA 10.0P 2026-09-11",
-      "RIOT 16.0P 2026-09-18",
-      "MSTR 100.0P 2026-09-18",
-      "MSTR 95.0P 2026-09-18",
-      "MSTR 110.0P 2026-09-18"
-    ],
-    "materially_unchanged": false
   }
 }
