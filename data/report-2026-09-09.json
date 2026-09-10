@@ -13743,38 +13743,5 @@
         "reject_reason": "strike not OTM"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-09-09 10:17:08 EDT",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 359,
-    "rejected_delta": -359,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "IREN 40.0P 2026-10-09",
-      "IREN 38.0P 2026-10-09",
-      "MARA 11.0P 2026-10-09",
-      "MSTR 110.0P 2026-10-16",
-      "MSTR 115.0P 2026-10-16",
-      "MSTR 110.0P 2026-10-02",
-      "RIOT 18.0P 2026-10-09"
-    ],
-    "dropped_top_10": [
-      "IREN 39.0P 2026-10-16",
-      "IREN 40.0P 2026-10-23",
-      "MARA 10.5P 2026-10-09",
-      "SMCI 33.0P 2026-10-16",
-      "RIOT 20.0P 2026-09-25",
-      "CLSK 11.0P 2026-10-16",
-      "RIOT 19.0P 2026-10-16"
-    ],
-    "materially_unchanged": false
   }
 }
