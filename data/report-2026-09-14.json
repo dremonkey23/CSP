@@ -13743,32 +13743,5 @@
         "reject_reason": "strike not OTM"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-09-14 10:38:06 EDT",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 325,
-    "rejected_delta": -325,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "HUT 82.0P 2026-10-09",
-      "MARA 10.0P 2026-10-02",
-      "IREN 40.0P 2026-10-02",
-      "CLSK 11.0P 2026-10-16"
-    ],
-    "dropped_top_10": [
-      "IREN 39.0P 2026-10-16",
-      "MARA 9.0P 2026-10-16",
-      "HUT 80.0P 2026-10-23",
-      "CLSK 12.0P 2026-10-16"
-    ],
-    "materially_unchanged": false
   }
 }
