@@ -13743,42 +13743,5 @@
         "reject_reason": "delta outside target range"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-09-28 10:16:45 EDT",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 349,
-    "rejected_delta": -349,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "HUT 80.0P 2026-11-06",
-      "MARA 11.0P 2026-10-16",
-      "HUT 80.0P 2026-10-30",
-      "HUT 84.0P 2026-10-16",
-      "MARA 10.5P 2026-10-23",
-      "MARA 10.0P 2026-10-16",
-      "IREN 35.0P 2026-11-06",
-      "IREN 39.0P 2026-10-16",
-      "IREN 35.0P 2026-10-30"
-    ],
-    "dropped_top_10": [
-      "IREN 38.0P 2026-11-06",
-      "MARA 11.0P 2026-11-06",
-      "IREN 37.0P 2026-11-06",
-      "ARM 260.0P 2026-10-16",
-      "IREN 34.0P 2026-11-06",
-      "MARA 10.5P 2026-10-30",
-      "MARA 11.5P 2026-10-30",
-      "RIOT 20.0P 2026-10-16",
-      "ARM 270.0P 2026-10-16"
-    ],
-    "materially_unchanged": false
   }
 }
