@@ -13743,30 +13743,5 @@
         "reject_reason": "strike not OTM"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-10-09 10:16:53 EDT",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 422,
-    "rejected_delta": -422,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "SMCI 34.0P 2026-11-20",
-      "APP 250.0P 2026-11-06",
-      "HUT 75.0P 2026-11-13"
-    ],
-    "dropped_top_10": [
-      "HUT 70.0P 2026-11-06",
-      "MARA 9.0P 2026-10-30",
-      "MARA 8.5P 2026-10-30"
-    ],
-    "materially_unchanged": false
   }
 }
