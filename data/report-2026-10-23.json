@@ -12723,40 +12723,5 @@
         "reject_reason": "delta outside target range"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-10-23 10:17:19 EDT",
-    "changed_visible_rows": 370,
-    "section_changes": {
-      "best_overall": 90,
-      "highest_premium": 90,
-      "best_assignment": 90,
-      "rejects": 100
-    },
-    "accepted_delta": 302,
-    "rejected_delta": -302,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "CLSK 7.0P 2026-11-20",
-      "CLSK 7.0P 2026-11-13",
-      "CLSK 7.0P 2026-11-06",
-      "LRCX 200.0P 2026-11-20",
-      "MU 720.0P 2026-11-20",
-      "MU 700.0P 2026-11-20",
-      "NVDA 170.0P 2026-11-20",
-      "MU 690.0P 2026-11-20"
-    ],
-    "dropped_top_10": [
-      "LRCX 210.0P 2026-11-20",
-      "CLSK 6.5P 2026-11-20",
-      "CRWD 197.5P 2026-11-20",
-      "NVDA 175.0P 2026-11-20",
-      "LRCX 220.0P 2026-11-06",
-      "ORCL 120.0P 2026-11-06",
-      "CRWD 205.0P 2026-11-20",
-      "CRWD 200.0P 2026-11-20"
-    ],
-    "materially_unchanged": false
   }
 }
