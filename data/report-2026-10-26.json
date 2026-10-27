@@ -12723,36 +12723,5 @@
         "reject_reason": "strike not OTM"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-10-26 10:17:00 EDT",
-    "changed_visible_rows": 370,
-    "section_changes": {
-      "best_overall": 90,
-      "highest_premium": 90,
-      "best_assignment": 90,
-      "rejects": 100
-    },
-    "accepted_delta": 142,
-    "rejected_delta": -142,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "CLSK 7.0P 2026-11-13",
-      "CLSK 7.0P 2026-12-04",
-      "CRWD 200.0P 2026-11-20",
-      "PANW 340.0P 2026-11-20",
-      "IBIT 37.0P 2026-11-30",
-      "ORCL 100.0P 2026-11-20"
-    ],
-    "dropped_top_10": [
-      "CLSK 6.0P 2026-11-20",
-      "MU 700.0P 2026-11-20",
-      "CRWD 217.5P 2026-11-20",
-      "MDB 360.0P 2026-11-13",
-      "MDB 350.0P 2026-11-20",
-      "MU 720.0P 2026-11-13"
-    ],
-    "materially_unchanged": false
   }
 }
