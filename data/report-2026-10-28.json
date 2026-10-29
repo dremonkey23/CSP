@@ -13233,38 +13233,5 @@
         "reject_reason": "strike not OTM"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-10-28 10:17:05 EDT",
-    "changed_visible_rows": 388,
-    "section_changes": {
-      "best_overall": 96,
-      "highest_premium": 96,
-      "best_assignment": 96,
-      "rejects": 100
-    },
-    "accepted_delta": -172,
-    "rejected_delta": 172,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "CLSK 7.0P 2026-11-13",
-      "CLSK 6.5P 2026-11-27",
-      "HOOD 75.0P 2026-12-04",
-      "HOOD 70.0P 2026-11-27",
-      "CRWD 210.0P 2026-11-20",
-      "CRWD 210.0P 2026-11-27",
-      "CRWD 220.0P 2026-11-20"
-    ],
-    "dropped_top_10": [
-      "CLSK 6.5P 2026-11-20",
-      "CLSK 7.5P 2026-11-20",
-      "HOOD 80.0P 2026-11-20",
-      "HOOD 78.0P 2026-11-13",
-      "SOFI 14.0P 2026-11-20",
-      "MU 800.0P 2026-11-20",
-      "IBIT 37.0P 2026-11-30"
-    ],
-    "materially_unchanged": false
   }
 }
