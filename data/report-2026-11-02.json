@@ -13743,40 +13743,5 @@
         "reject_reason": "strike not OTM"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-11-02 10:17:09 EST",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 98,
-    "rejected_delta": -98,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "CLSK 6.0P 2026-11-27",
-      "CLSK 6.0P 2026-12-04",
-      "COIN 125.0P 2026-11-20",
-      "COIN 130.0P 2026-11-20",
-      "COIN 120.0P 2026-11-20",
-      "SNOW 270.0P 2026-12-04",
-      "MU 680.0P 2026-11-20",
-      "MU 690.0P 2026-11-20"
-    ],
-    "dropped_top_10": [
-      "CLSK 6.5P 2026-11-20",
-      "MDB 280.0P 2026-11-20",
-      "MDB 310.0P 2026-11-20",
-      "MDB 295.0P 2026-12-11",
-      "CLSK 7.0P 2026-11-20",
-      "MSTR 120.0P 2026-11-20",
-      "MSTR 105.0P 2026-11-20",
-      "ORCL 100.0P 2026-11-20"
-    ],
-    "materially_unchanged": false
   }
 }
