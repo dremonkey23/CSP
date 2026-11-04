@@ -13743,34 +13743,5 @@
         "reject_reason": "bid below minimum"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-11-03 10:17:32 EST",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 150,
-    "rejected_delta": -150,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "MSTR 125.0P 2026-11-20",
-      "MDB 270.0P 2026-12-18",
-      "CLSK 7.0P 2026-11-20",
-      "MU 700.0P 2026-12-18",
-      "ORCL 105.0P 2026-12-18"
-    ],
-    "dropped_top_10": [
-      "SNOW 270.0P 2026-12-04",
-      "MDB 300.0P 2026-12-18",
-      "SNOW 250.0P 2026-12-04",
-      "CLSK 6.5P 2026-11-20",
-      "SNOW 245.0P 2026-12-04"
-    ],
-    "materially_unchanged": false
   }
 }
