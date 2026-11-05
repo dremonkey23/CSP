@@ -13743,42 +13743,5 @@
         "reject_reason": "spread too wide (82.1%)"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-11-04 10:17:54 EST",
-    "changed_visible_rows": 400,
-    "section_changes": {
-      "best_overall": 100,
-      "highest_premium": 100,
-      "best_assignment": 100,
-      "rejects": 100
-    },
-    "accepted_delta": 176,
-    "rejected_delta": -176,
-    "symbols_delta": 0,
-    "new_top_10": [
-      "MDB 280.0P 2026-12-18",
-      "MDB 285.0P 2026-12-11",
-      "ORCL 100.0P 2026-12-18",
-      "MDB 270.0P 2026-12-18",
-      "CLSK 6.0P 2026-11-27",
-      "LRCX 200.0P 2026-12-18",
-      "SMCI 26.0P 2026-11-20",
-      "SMCI 25.0P 2026-12-18",
-      "SMCI 27.0P 2026-11-20"
-    ],
-    "dropped_top_10": [
-      "MDB 305.0P 2026-12-04",
-      "MDB 310.0P 2026-12-18",
-      "MDB 290.0P 2026-12-18",
-      "MU 670.0P 2026-11-20",
-      "MU 680.0P 2026-11-20",
-      "MU 700.0P 2026-11-20",
-      "HOOD 75.0P 2026-12-18",
-      "CRWD 210.0P 2026-12-18",
-      "CLSK 6.0P 2026-12-18"
-    ],
-    "materially_unchanged": false
   }
 }
