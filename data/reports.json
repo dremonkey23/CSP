@@ -1,9 +1,15 @@
 [
   {
+    "date": "2026-11-11",
+    "file": "/home/hermes/.cache/csp-radar-local-refresh/CSP/reports/2026-11-11.json",
+    "bytes": 26193698,
+    "updated_at": "2026-11-11 10:18:26 EST"
+  },
+  {
     "date": "2026-11-10",
     "file": "/home/hermes/.cache/csp-radar-local-refresh/CSP/reports/2026-11-10.json",
-    "bytes": 25524934,
-    "updated_at": "2026-11-10 10:18:27 EST"
+    "bytes": 25536473,
+    "updated_at": "2026-11-10 14:17:48 EST"
   },
   {
     "date": "2026-11-09",
