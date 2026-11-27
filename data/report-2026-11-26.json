@@ -13743,22 +13743,5 @@
         "reject_reason": "strike not OTM"
       }
     ]
-  },
-  "change_summary": {
-    "available": true,
-    "previous_updated_at": "2026-11-26 10:17:37 EST",
-    "changed_visible_rows": 99,
-    "section_changes": {
-      "best_overall": 0,
-      "highest_premium": 0,
-      "best_assignment": 0,
-      "rejects": 99
-    },
-    "accepted_delta": 0,
-    "rejected_delta": 0,
-    "symbols_delta": 0,
-    "new_top_10": [],
-    "dropped_top_10": [],
-    "materially_unchanged": false
   }
 }
